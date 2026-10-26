@@ -1,0 +1,1707 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>애드클로버 | 온라인 마케팅 종합 진단서 생성기</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+  html,body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic','Noto Sans KR',sans-serif}
+  body{background:radial-gradient(1200px 600px at 50% -10%,#1e293b 0%,#0f172a 55%,#020617 100%);}
+  .fld{width:100%;background:#0f172a;border:1px solid #334155;border-radius:.6rem;padding:.6rem .8rem;color:#f1f5f9;font-size:.9rem;outline:none;transition:border-color .15s, box-shadow .15s}
+  .fld::placeholder{color:#64748b}
+  .fld:focus{border-color:#34d399;box-shadow:0 0 0 3px rgba(52,211,153,.18)}
+  .fld.err{border-color:#f87171;box-shadow:0 0 0 3px rgba(248,113,113,.15)}
+  select.fld{appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%2394a3b8' stroke-width='2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right .8rem center;padding-right:2rem}
+  .lbl{display:flex;align-items:center;gap:.35rem;font-size:.78rem;font-weight:700;color:#cbd5e1;margin-bottom:.35rem}
+  .lbl .no{display:inline-flex;align-items:center;justify-content:center;width:1.15rem;height:1.15rem;border-radius:999px;background:#064e3b;color:#6ee7b7;font-size:.65rem}
+  .req{color:#f87171;font-size:.7rem;font-weight:700}
+  .errmsg{color:#fca5a5;font-size:.72rem;margin-top:.25rem;display:none}
+  .chip{display:inline-flex;align-items:center;gap:.25rem;background:#064e3b;color:#a7f3d0;border:1px solid #065f46;border-radius:999px;padding:.12rem .6rem;font-size:.72rem}
+  .btn-main{background:linear-gradient(135deg,#10b981,#059669);color:#fff;font-weight:800;border-radius:.75rem;padding:.9rem 1rem;box-shadow:0 8px 24px rgba(16,185,129,.28);transition:transform .12s, filter .12s}
+  .btn-main:hover{filter:brightness(1.08);transform:translateY(-1px)}
+  .btn-sub{background:#1e293b;color:#e2e8f0;border:1px solid #475569;font-weight:700;border-radius:.75rem;padding:.9rem 1rem;transition:background .12s}
+  .btn-sub:hover{background:#334155}
+  .toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#0b1220;border:1px solid #334155;color:#e2e8f0;padding:.7rem 1.1rem;border-radius:.7rem;font-size:.85rem;z-index:60;box-shadow:0 10px 30px rgba(0,0,0,.5);display:none;max-width:90vw}
+  #fb{position:fixed;inset:0;background:rgba(2,6,23,.92);z-index:50;display:none;flex-direction:column}
+  #fb iframe{flex:1;border:0;background:#334155;width:100%}
+</style>
+</head>
+<body class="text-slate-100 min-h-screen">
+
+<div class="min-h-screen flex items-center justify-center px-4 py-8">
+  <main class="w-full max-w-3xl">
+    <div class="flex items-center justify-between mb-4 px-1">
+      <div class="flex items-center gap-3">
+        <div class="w-10 h-10 rounded-xl bg-emerald-500/15 border border-emerald-500/30 flex items-center justify-center text-emerald-400"><i class="fa-solid fa-seedling"></i></div>
+        <div>
+          <div class="text-[11px] tracking-[.18em] text-emerald-400 font-bold">ADCLOVER · MARKETING INTELLIGENCE</div>
+          <h1 class="text-xl sm:text-2xl font-extrabold leading-tight">온라인 마케팅 종합 진단서 생성기</h1>
+        </div>
+      </div>
+      <button type="button" id="btnSample" class="text-xs text-slate-400 hover:text-emerald-300 border border-slate-700 hover:border-emerald-500/50 rounded-lg px-3 py-1.5 transition"><i class="fa-solid fa-wand-magic-sparkles mr-1"></i>예시 채우기</button>
+    </div>
+
+    <form id="reportForm" novalidate class="bg-slate-800/70 backdrop-blur border border-slate-700 rounded-2xl shadow-2xl p-5 sm:p-7 space-y-4">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+        <div>
+          <label class="lbl" for="bizName"><span class="no">1</span>업체명(상호) <span class="req">필수</span></label>
+          <input id="bizName" class="fld" type="text" maxlength="40" placeholder="예) 국민낙곱새 의정부점" autocomplete="off">
+          <div class="errmsg" data-err="bizName">업체명(상호)을 입력해 주세요.</div>
+        </div>
+        <div>
+          <label class="lbl" for="bizAddr"><span class="no">2</span>매장 주소 <span class="req">필수</span></label>
+          <input id="bizAddr" class="fld" type="text" maxlength="80" placeholder="예) 경기도 의정부시 추동로1번길 32" autocomplete="off">
+          <div class="errmsg" data-err="bizAddr">매장 주소를 입력해 주세요.</div>
+        </div>
+      </div>
+
+      <div>
+        <label class="lbl" for="bizKw"><span class="no">3</span>분석 대상 핵심 검색 키워드 <span class="req">필수</span><span class="ml-auto text-[11px] font-medium text-slate-400">쉼표(,)로 구분 · 최대 6개 <b id="kwCount" class="text-emerald-300">0/6</b></span></label>
+        <input id="bizKw" class="fld" type="text" placeholder="예) 의정부 낙곱새, 신곡동 맛집, 의정부 전골, 동오역 맛집, 의정부 배달 맛집" autocomplete="off">
+        <div id="kwChips" class="flex flex-wrap gap-1.5 mt-2 min-h-[1.5rem]"></div>
+        <div class="errmsg" data-err="bizKw">키워드를 1개 이상 입력해 주세요. (쉼표로 구분)</div>
+        <div id="kwOver" class="text-[11px] text-amber-300 mt-1 hidden"><i class="fa-solid fa-triangle-exclamation mr-1"></i>키워드는 최대 6개까지 반영되어 초과분은 제외됩니다.</div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-5 gap-4">
+        <div class="sm:col-span-2">
+          <label class="lbl" for="bizInd"><span class="no">4</span>업종 분류</label>
+          <select id="bizInd" class="fld"></select>
+        </div>
+        <div class="sm:col-span-3">
+          <label class="lbl" for="bizDetail">세부 업종 · 중점 품목 <span class="text-[11px] font-medium text-slate-500">(선택)</span></label>
+          <input id="bizDetail" class="fld" type="text" maxlength="40" placeholder="예) 낙곱새·전골 중점" autocomplete="off">
+        </div>
+      </div>
+      <div id="indHint" class="rounded-xl border border-slate-700 bg-slate-900/60 px-4 py-3 text-xs text-slate-300 leading-relaxed"></div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+        <div>
+          <label class="lbl" for="bizIssuer"><span class="no">5</span>발행 회사</label>
+          <input id="bizIssuer" class="fld" type="text" maxlength="30" value="애드클로버" autocomplete="off">
+        </div>
+        <div>
+          <label class="lbl" for="bizDate"><span class="no">6</span>진단 기준일</label>
+          <input id="bizDate" class="fld" type="date">
+        </div>
+        <div>
+          <label class="lbl" for="bizDoc">고유 문서 식별 번호</label>
+          <div class="flex gap-2">
+            <input id="bizDoc" class="fld font-mono text-[.82rem]" type="text" maxlength="30" autocomplete="off">
+            <button type="button" id="btnDoc" title="문서번호 재채번" class="shrink-0 w-10 rounded-lg border border-slate-600 text-slate-300 hover:text-emerald-300 hover:border-emerald-500/60 transition"><i class="fa-solid fa-rotate"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <details id="liveBox" class="rounded-xl border border-slate-700 bg-slate-900/50">
+        <summary class="cursor-pointer select-none px-4 py-3 text-sm font-bold text-slate-200 flex items-center gap-2"><i class="fa-solid fa-plug text-emerald-400"></i>실측 데이터 연동 · 직접 입력 <span class="text-[11px] font-medium text-slate-500">(선택) — 연동하면 해당 수치가 추정 대신 실측으로 바뀝니다</span><span id="apiPill" class="ml-auto text-[11px] font-semibold rounded-full px-2 py-0.5 bg-slate-700 text-slate-300">API 미연결</span></summary>
+        <div class="px-4 pb-4 pt-1 space-y-4 text-xs">
+          <div>
+            <label class="lbl" for="apiBase">API 서버 주소 <span class="text-[11px] font-medium text-slate-500">(server/ 프록시. 같은 주소에서 열었다면 비워 두세요)</span></label>
+            <div class="flex gap-2"><input id="apiBase" class="fld" type="text" placeholder="예) https://adclover-report-api.xxx.workers.dev" autocomplete="off"><button type="button" id="btnApi" class="shrink-0 px-3 rounded-lg border border-slate-600 text-slate-300 hover:text-emerald-300 hover:border-emerald-500/60 transition">연결 확인</button></div>
+            <div id="apiMsg" class="text-[11px] text-slate-400 mt-1.5 leading-relaxed">연결하지 않으면 진단서는 모델 추정값으로만 생성됩니다.</div>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+            <div><label class="lbl" for="bizNo">사업자등록번호 <span class="text-[11px] font-medium text-slate-500">(국세청 상태조회)</span></label><input id="bizNo" class="fld" type="text" inputmode="numeric" maxlength="12" placeholder="예) 123-45-67890" autocomplete="off"></div>
+            <div><label class="lbl" for="manAds">광고 집행 여부 <span class="text-[11px] font-medium text-slate-500">(직접 확인한 경우)</span></label><select id="manAds" class="fld"><option value="">모름 (추정)</option><option value="on">집행 중</option><option value="off">미집행</option></select></div>
+          </div>
+          <div>
+            <label class="lbl" for="manRanks">키워드별 플레이스 순위 <span class="text-[11px] font-medium text-slate-500">(모바일 직접 확인 · 위 키워드 순서대로 쉼표 구분, 모르면 비움 · 예: 5, 12, , 33)</span></label>
+            <input id="manRanks" class="fld" type="text" placeholder="예) 5, 12, , 33, 41" autocomplete="off">
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-5 gap-3">
+            <div><label class="lbl" for="manReviews">방문자 리뷰</label><input id="manReviews" class="fld" type="number" min="0" placeholder="건"></div>
+            <div><label class="lbl" for="manPhotos">등록 사진</label><input id="manPhotos" class="fld" type="number" min="0" placeholder="장"></div>
+            <div><label class="lbl" for="manNews">소식(30일)</label><input id="manNews" class="fld" type="number" min="0" placeholder="건"></div>
+            <div><label class="lbl" for="manReply">답글 (10건 중)</label><input id="manReply" class="fld" type="number" min="0" max="10" placeholder="0~10"></div>
+            <div><label class="lbl" for="manRating">별점</label><input id="manRating" class="fld" type="number" min="1" max="5" step="0.01" placeholder="예) 4.47"></div>
+          </div>
+          <label class="flex items-start gap-2 text-slate-300 leading-relaxed cursor-pointer"><input id="fixBand" type="checkbox" checked class="mt-0.5 accent-emerald-500"><span><b>종합 점수를 42~57점 · C등급 대역으로 고정</b> (발행 규격). 실측 데이터로 있는 그대로 점수를 보려면 체크를 해제하세요.</span></label>
+        </div>
+      </details>
+
+      <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
+        <button type="submit" id="btnPdf" class="btn-main sm:col-span-3 text-sm sm:text-[.95rem]"><i class="fa-solid fa-file-pdf mr-2"></i>지정 키워드 분석 및 15장 PDF 바로 저장하기</button>
+        <button type="button" id="btnPreview" class="btn-sub sm:col-span-2 text-sm"><i class="fa-regular fa-window-restore mr-2"></i>새 창에서 미리보기</button>
+      </div>
+
+      <div class="text-[11px] text-slate-500 leading-relaxed border-t border-slate-700/70 pt-3">
+        <i class="fa-solid fa-circle-info text-slate-400 mr-1"></i>
+        버튼을 누르면 새 창이 열리고 인쇄창이 자동 호출됩니다. <b class="text-slate-300">대상: PDF로 저장</b> · <b class="text-slate-300">옵션 &gt; 배경 그래픽</b>을 체크하면 A4 15장 벡터 PDF가 저장됩니다. 팝업이 차단되면 주소창의 팝업 허용을 눌러 주세요.
+        API를 연결하지 않으면 상권·검색량·순위 수치는 입력값 기반 <b class="text-slate-300">모델 추정값</b>이며, 연결한 항목만 <b class="text-slate-300">실측</b>으로 표시됩니다. 플레이스 순위·광고 노출은 공식 API가 없어 직접 입력하거나 추정으로 처리됩니다.
+      </div>
+    </form>
+  </main>
+</div>
+
+<div id="fb">
+  <div class="flex items-center justify-between gap-3 bg-slate-900 border-b border-slate-700 px-4 py-2.5 text-sm">
+    <div class="text-slate-300"><i class="fa-solid fa-triangle-exclamation text-amber-300 mr-2"></i>팝업이 차단되어 현재 화면 안에서 표시합니다. (iframe 환경에서는 새 탭에서 열기를 권장)</div>
+    <div class="flex gap-2">
+      <button id="fbPrint" class="px-3 py-1.5 rounded-lg bg-emerald-600 hover:bg-emerald-500 font-bold">인쇄 / PDF 저장</button>
+      <button id="fbDownload" class="px-3 py-1.5 rounded-lg bg-slate-700 hover:bg-slate-600">HTML 내려받기</button>
+      <button id="fbClose" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 border border-slate-600">닫기</button>
+    </div>
+  </div>
+  <iframe id="fbFrame" title="report"></iframe>
+</div>
+<div id="toast" class="toast"></div>
+
+<script>
+/* ==========================================================================
+   0. 공통 유틸
+   ========================================================================== */
+const esc = s => String(s == null ? '' : s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const nf = n => Math.round(Number(n)).toLocaleString('ko-KR');
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const rk = r => (r > 50 ? '권외' : r + '위');
+const roundTo = (v, u) => Math.round(v / u) * u;
+const pad2 = n => String(n).padStart(2, '0');
+const ymd = d => d.getFullYear() + '.' + pad2(d.getMonth() + 1) + '.' + pad2(d.getDate());
+const ymdCompact = d => d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate());
+const isoLocal = d => d.getFullYear() + '-' + pad2(d.getMonth() + 1) + '-' + pad2(d.getDate());
+const parseISO = s => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(s || ''); return m ? new Date(+m[1], +m[2] - 1, +m[3]) : new Date(); };
+const addDays = (d, n) => { const x = new Date(d.getTime()); x.setDate(x.getDate() + n); return x; };
+
+function hashSeed(str) {
+  let h = 1779033703 ^ str.length;
+  for (let i = 0; i < str.length; i++) { h = Math.imul(h ^ str.charCodeAt(i), 3432918353); h = (h << 13) | (h >>> 19); }
+  h = Math.imul(h ^ (h >>> 16), 2246822507); h = Math.imul(h ^ (h >>> 13), 3266489909);
+  return (h ^ (h >>> 16)) >>> 0;
+}
+function makeRng(seed) {
+  let a = seed >>> 0;
+  const next = () => { a = (a + 0x6D2B79F5) | 0; let t = Math.imul(a ^ (a >>> 15), 1 | a); t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t; return ((t ^ (t >>> 14)) >>> 0) / 4294967296; };
+  return {
+    next,
+    range: (lo, hi) => lo + next() * (hi - lo),
+    int: (lo, hi) => Math.floor(lo + next() * (hi - lo + 1)),
+    pick: arr => arr[Math.floor(next() * arr.length)],
+    chance: p => next() < p,
+    shuffle(arr) { const x = arr.slice(); for (let i = x.length - 1; i > 0; i--) { const j = Math.floor(next() * (i + 1)); [x[i], x[j]] = [x[j], x[i]]; } return x; }
+  };
+}
+
+/* ==========================================================================
+   1. 10대 업종 분류 체계 (INDUSTRY_CONFIG)
+   w: 채널 가중치(플레이스·리뷰·블로그·홈페이지/예약채널·SNS·광고·정보일관성) 합계 100
+   ========================================================================== */
+const CHANNEL_KEYS = ['place', 'review', 'blog', 'home', 'ads', 'info'];
+
+const INDUSTRY_CONFIG = {
+  medical: {
+    key: 'medical', label: '병원·의료기관', icon: 'fa-hospital', ind: '병원',
+    law: { name: '의료법 제56조 (의료광고의 금지·제한)', summary: '치료경험담·환자 후기, 과장·비교 표현 등 소비자를 현혹할 우려가 있는 의료광고는 제한되며, 규정 매체의 광고는 사전 심의 기준을 따라야 합니다.',
+      rules: ['체험단·후기 원고는 개선 과제에서 제외 (치료경험담 광고 금지)', '치료 효과 보장·"최고/유일" 등 최상급 표현 지양', '전후 사진·환자 후기 대신 정보성 콘텐츠 중심 설계'] },
+    w: { place: 25, review: 15, blog: 15, home: 25, sns: 5, ads: 10, info: 5 },
+    homeLabel: '홈페이지·브랜딩', reviewLabel: '방문자 리뷰 관리', itemNoun: '진료과목·의료진',
+    focus: ['홈페이지·브랜딩 신뢰도', '플레이스 진료정보 정확성', '의료법 준수 정보성 콘텐츠'],
+    defaultCore: '병원', kwSuffix: ['추천', '잘하는곳', '야간진료'],
+    volMul: 1.0, reviewMul: 0.5, photoTarget: 40, compPer1k: 2.2, cpc: [900, 3200],
+    cats: ['병원·의원', '진료과 전문의원'],
+    compPat: ['{a} 서울{c}', '{c} {A}점', '{a} 연세{c}', '{A} 바른{c}', '{a} 밝은{c}', '{A} 365{c}'],
+    blogT: [['{a} {c} 선택 시 꼭 확인할 5가지 기준', '정보성'], ['{a} {c} 진료 전 알아두면 좋은 준비사항 - {n}', '정보성'], ['{A} {c} 비용·보험 적용 범위 정리 ({n})', '정보성'], ['{a}에서 {c} 찾는다면? {n} 진료시간·주차 안내', '정보성']],
+    tasks: [
+      { t: '홈페이지 진료과목·의료진 전문성 정비', d: '진료과목별 소개·의료진 약력·장비/시설 사진 구성, 상담 예약 CTA 상단 배치 ({c} 랜딩 구조)', ch: 'home', imp: 3, eff: 2 },
+      { t: '의료광고 기준 부합 정보성 칼럼 월 {b}건', d: '「{a} {c} 선택 기준」 등 질환·시술 정보 중심 칼럼, 치료경험담·전후사진 배제 (의료법 제56조)', ch: 'blog', imp: 2, eff: 2 },
+      { t: '진료시간·예약 연동 및 의료진 플레이스 반영', d: '네이버 예약·톡톡 연결, 진료/점심/휴진 시간 정확 표기, 의료진·시설 사진 등록', ch: 'place', imp: 2, eff: 1 }
+    ]
+  },
+  food: {
+    key: 'food', label: '음식점·요식업', icon: 'fa-utensils', ind: '음식점',
+    law: { name: '식품위생법 · 식품표시광고법 · 원산지 표시', summary: '영업신고·위생 기준과 원산지·알레르기 표시 의무를 준수해야 하며, 객관 근거 없는 "최고·1등" 표현과 대가성 리뷰의 미표시는 제한됩니다.',
+      rules: ['원산지·알레르기 정보를 메뉴판·플레이스에 동일하게 표기', '"최고·1등" 등 근거 없는 최상급 표현 지양', '리뷰 이벤트 시 대가 제공 사실 표시 (표시광고법)'] },
+    w: { place: 28, review: 22, blog: 10, home: 10, sns: 15, ads: 8, info: 7 },
+    homeLabel: '배달·예약 채널', reviewLabel: '영수증 리뷰 관리', itemNoun: '메뉴·가격',
+    focus: ['플레이스 상세 최적화', '영수증·방문자 리뷰 확보', '인스타그램 비주얼', '배달 채널 연동'],
+    defaultCore: '맛집', kwSuffix: ['맛집', '추천', '근처 맛집'],
+    volMul: 1.4, reviewMul: 1.0, photoTarget: 60, compPer1k: 6.5, cpc: [150, 700],
+    cats: ['한식', '음식점'],
+    compPat: ['{a} {c} 본가', '{c}명가 {A}점', '{a} 골목{c}', '{c}공방 {A}점', '{a} 참{c}', '{c}마을 {A}점'],
+    blogT: [['[{a} 맛집] {n} 솔직후기 - {c} 먹고 왔어요', '방문후기'], ['{a} {c} 맛집 추천 | 웨이팅 없이 가는 법', '정보성'], ['{a}에서 {c} 먹을 땐 여기! {n} 방문기', '방문후기'], ['{A} 가족 외식 장소 {n} 메뉴·가격 정리', '정보성']],
+    tasks: [
+      { t: '대표메뉴 비주얼 사진·메뉴판 정비', d: '{c} 대표 메뉴 사진 촬영(상차림·단면·인원별 구성), 메뉴·가격·원산지 전 항목 등록', ch: 'place', imp: 3, eff: 1 },
+      { t: '배달·예약 채널 연동 및 일치화', d: '네이버 주문/예약·배달앱 정보 일치, 배달 가능 범위·최소주문 표기, {a} 배달 키워드 대응', ch: 'home', imp: 2, eff: 2 },
+      { t: '인스타그램 릴스·영수증 리뷰 동선', d: '테이블 QR로 영수증 리뷰 안내(대가 제공 시 표시), 주 2회 릴스·피드로 {c} 비주얼 노출', ch: 'review', imp: 3, eff: 2 }
+    ]
+  },
+  fitness: {
+    key: 'fitness', label: '헬스·피트니스·필라테스', icon: 'fa-dumbbell', ind: '센터',
+    law: { name: '체육시설법 · 공정위 소비자분쟁해결기준(환불)', summary: '체육시설 이용권·PT 계약은 환불·해지 기준을 사전에 고지해야 하며, 체형 변화·감량 보장 등 효과 단정 표현은 소비자 오인 소지가 있습니다.',
+      rules: ['이용권·PT 환불·해지 규정을 홈페이지·플레이스에 고지', '체형 변화·감량 보장 등 효과 단정 표현 지양', '1일 체험·상담 가격을 투명하게 명시'] },
+    w: { place: 25, review: 18, blog: 12, home: 15, sns: 12, ads: 10, info: 8 },
+    homeLabel: '체험예약·상담 채널', reviewLabel: '방문자·포토후기 관리', itemNoun: '프로그램·이용권 가격',
+    focus: ['네이버 체험 예약', '비주얼 릴스·시설 사진', '포토후기 확보'],
+    defaultCore: '헬스장', kwSuffix: ['추천', '가격', '체험'],
+    volMul: 0.8, reviewMul: 0.6, photoTarget: 50, compPer1k: 1.2, cpc: [300, 1200],
+    cats: ['헬스장', '필라테스'],
+    compPat: ['{a} {c} 짐', '{A} 바디{c}', '{a} 에이블{c}', '{A} 라이프{c}', '{a} 플로우{c}', '{A} 포커스{c}'],
+    blogT: [['{a} {c} 등록 전 체크리스트 - 환불 규정까지', '정보성'], ['{a} {c} 체험 후기 | {n} 시설·프로그램', '방문후기'], ['{A} 초보 {c} 선택 가이드 ({n} 사례)', '정보성'], ['{a} {c} 이용권 가격 비교 {n}', '정보성']],
+    tasks: [
+      { t: '네이버 체험(1일권) 예약 개설', d: '체험 예약 상품 등록, 시간대별 정원·가격 노출, 상담 신청 동선 {a} {c} 키워드와 연결', ch: 'home', imp: 3, eff: 1 },
+      { t: '시설·프로그램 비주얼 릴스 제작', d: '시설 투어·클래스 현장 숏폼 월 6건, 플레이스·블로그 동시 활용 (효과 보장 문구 배제)', ch: 'blog', imp: 2, eff: 2 },
+      { t: '트레이너 소개·가격·환불규정 투명 공개', d: '강사 프로필·자격, 이용권별 가격표, 환불·양도 규정을 플레이스 소개글·사진으로 고지', ch: 'place', imp: 2, eff: 1 }
+    ]
+  },
+  beauty: {
+    key: 'beauty', label: '미용·뷰티·에스테틱', icon: 'fa-scissors', ind: '샵',
+    law: { name: '공중위생관리법 · 옥외가격표시제', summary: '미용업은 최종지불가격표를 게시해야 하며, 시술 효과 보장 표현과 협찬·대가성 포토후기의 미표시는 제한됩니다.',
+      rules: ['최종지불가격표를 옥외·내부 및 온라인에 일치 게시', '시술 효과 보장·과장 표현 지양', '협찬 포토후기는 대가 제공 사실 표시'] },
+    w: { place: 27, review: 20, blog: 10, home: 13, sns: 15, ads: 8, info: 7 },
+    homeLabel: '디자이너별 예약', reviewLabel: '포토후기 관리', itemNoun: '시술 메뉴·가격',
+    focus: ['디자이너별 예약', '시술 스타일 사진', '포토후기'],
+    defaultCore: '미용실', kwSuffix: ['추천', '가격', '예약'],
+    volMul: 1.1, reviewMul: 0.8, photoTarget: 70, compPer1k: 4.0, cpc: [250, 900],
+    cats: ['미용실', '피부관리'],
+    compPat: ['{a} 헤어{c}', '{A} 살롱드{c}', '{a} 라온{c}', '{A} 모먼트{c}', '{a} 보니따{c}', '{A} 블룸{c}'],
+    blogT: [['{a} {c} 추천 | {n} 시술 후기와 가격', '방문후기'], ['{a}에서 스타일 바꾸고 싶다면 {n}', '방문후기'], ['{A} {c} 예약 전 알아둘 점 - 가격표 공개', '정보성'], ['{a} {c} 디자이너 상담 팁 ({n})', '정보성']],
+    tasks: [
+      { t: '디자이너별 예약·시술 가격표 정비', d: '디자이너 프로필·담당 시술별 네이버 예약 분리, 최종지불가격표 등록 (옥외가격표시제 정합)', ch: 'home', imp: 3, eff: 2 },
+      { t: '시술 스타일 포트폴리오 사진 확충', d: '시술 전후·스타일별 앨범 구성, 대표 사진 {c} 키워드명 지정, 월 20장 신규 업로드', ch: 'place', imp: 3, eff: 1 },
+      { t: '포토후기 확보 동선 구축', d: '시술 직후 포토후기 안내(대가 제공 시 표시), 후기 답글 템플릿 관리', ch: 'review', imp: 2, eff: 1 }
+    ]
+  },
+  edu: {
+    key: 'edu', label: '학원·교육', icon: 'fa-graduation-cap', ind: '학원',
+    law: { name: '학원법 (학원의 설립·운영 및 과외교습에 관한 법률)', summary: '교습비 등은 게시·신고된 금액을 준수해야 하며, 합격률·성적 향상 등 허위·과장 광고는 금지됩니다.',
+      rules: ['교습비·등록번호를 게시 및 온라인에 동일 표기', '합격률·성적 향상 보장 등 허위·과장 표현 금지', '학부모 후기는 동의 확인 및 대가 표시 준수'] },
+    w: { place: 20, review: 15, blog: 20, home: 20, sns: 5, ads: 12, info: 8 },
+    homeLabel: '설명회 예약 채널', reviewLabel: '학부모 추천 관리', itemNoun: '수강 과목·교습비',
+    focus: ['학업성과 입시 칼럼', '설명회 예약', '학부모 추천'],
+    defaultCore: '학원', kwSuffix: ['추천', '후기', '수강료'],
+    volMul: 0.9, reviewMul: 0.35, photoTarget: 40, compPer1k: 3.0, cpc: [400, 1500],
+    cats: ['학원', '교습소'],
+    compPat: ['{a} 청솔{c}', '{A} 명문{c}', '{a} 에듀{c}', '{A} 새빛{c}', '{a} 프라임{c}', '{A} 스카이{c}'],
+    blogT: [['{a} {c} 선택 기준 | 우리 아이에게 맞는 수업은?', '정보성'], ['{A} 학부모가 궁금해하는 {c} 커리큘럼 ({n})', '정보성'], ['{a} {c} 설명회 일정 안내 - {n}', '정보성'], ['{a} 내신·입시 대비 로드맵 {n} 학습 상담', '정보성']],
+    tasks: [
+      { t: '학업·입시 정보 칼럼 월 {b}건 발행', d: '{a} 학군·학교별 내신 정보·입시 일정 칼럼, 합격 실적 단정 표현 배제', ch: 'blog', imp: 3, eff: 2 },
+      { t: '설명회·상담 예약 채널 개설', d: '네이버 예약으로 설명회·레벨테스트 신청, 회차별 정원·일정 노출', ch: 'home', imp: 3, eff: 1 },
+      { t: '교습비·반 편성 정보 투명 게시', d: '과목별 교습비·반 구성·강사진을 플레이스 소개글·메뉴로 등록 (학원법 게시 기준 정합)', ch: 'place', imp: 2, eff: 1 }
+    ]
+  },
+  legal: {
+    key: 'legal', label: '법률·세무·전문직', icon: 'fa-scale-balanced', ind: '사무소',
+    law: { name: '변호사 광고에 관한 규정 · 전문자격사 광고 규정', summary: '승소율·성공 보장 등 결과를 단정하는 표현, 의뢰인 식별 가능한 사례 공개, 비교·과장 광고는 금지 또는 제한됩니다.',
+      rules: ['승소율·성공 보장 등 결과 단정 표현 금지', '사건 사례는 비식별 처리·의뢰인 동의 하에 게시', '"최고·유일" 등 비교·과장 표현 지양'] },
+    w: { place: 12, review: 8, blog: 22, home: 28, sns: 5, ads: 18, info: 7 },
+    homeLabel: '홈페이지·전문 칼럼', reviewLabel: '의뢰인 리뷰 관리', itemNoun: '업무분야·전문가',
+    focus: ['전문 판례·사례 칼럼', '파워링크 광고', '홈페이지 분야별 랜딩'],
+    defaultCore: '법률사무소', kwSuffix: ['상담', '비용', '잘하는곳'],
+    volMul: 0.7, reviewMul: 0.15, photoTarget: 25, compPer1k: 0.9, cpc: [1500, 4800],
+    cats: ['법률사무소', '세무·회계'],
+    compPat: ['{a} 법무법인 {c}', '{A} 정의{c}', '{a} 바른{c}', '{A} 한결{c}', '{a} 신뢰{c}', '{A} 로앤{c}'],
+    blogT: [['{a} {c} 상담 전 준비해야 할 서류 체크리스트', '정보성'], ['{A} {c} 절차 총정리 | {n} 업무 안내', '정보성'], ['{a} {c} 비용 구조와 선임 시 확인 사항', '정보성'], ['{A} 관련 판례 해설 칼럼 - {n}', '정보성']],
+    tasks: [
+      { t: '분야별 전문 칼럼·판례 해설 월 {b}건', d: '업무분야별 절차·판례 해설 중심, 승소율·성공 보장 표현 배제 (변호사 광고 규정)', ch: 'blog', imp: 3, eff: 2 },
+      { t: '상담 키워드 파워링크 광고 구조 설계', d: '{a} {c} 상담·비용 키워드 중심 소액 테스트 후 전환 키워드로 압축', ch: 'ads', imp: 3, eff: 2 },
+      { t: '홈페이지 분야별 랜딩·전문가 프로필 구축', d: '업무분야별 랜딩 페이지, 전문가 약력·자격 표기, 상담 신청 폼 상단 배치', ch: 'home', imp: 3, eff: 3 }
+    ]
+  },
+  interior: {
+    key: 'interior', label: '인테리어·리모델링', icon: 'fa-couch', ind: '시공사',
+    law: { name: '건설산업기본법 (실내건축공사업 등록) · 하자담보책임', summary: '일정 규모 이상 공사는 실내건축공사업 등록 업체가 시공해야 하며, 면허·등록번호와 하자보증 조건을 명확히 고지해야 합니다.',
+      rules: ['실내건축공사업 등록·면허번호 홈페이지·플레이스 표기', '시공 사례에 평형·공사 범위·기간·금액 범위 명시', '하자보증 기간·AS 절차 고지'] },
+    w: { place: 15, review: 15, blog: 22, home: 25, sns: 10, ads: 8, info: 5 },
+    homeLabel: '시공사례·쇼룸 채널', reviewLabel: '시공 후기 관리', itemNoun: '시공 분야·사례',
+    focus: ['아파트 평형별 시공사례', '쇼룸 방문 예약', '블로그 포트폴리오'],
+    defaultCore: '인테리어', kwSuffix: ['견적', '비용', '추천'],
+    volMul: 0.9, reviewMul: 0.25, photoTarget: 60, compPer1k: 0.9, cpc: [800, 2800],
+    cats: ['인테리어 디자인', '리모델링'],
+    compPat: ['{a} 디자인{c}', '{A} 공간{c}', '{a} 홈스타일 {c}', '{A} 스튜디오 {c}', '{a} 라이프{c}', '{A} 하우스{c}'],
+    blogT: [['{a} 아파트 {c} 평형별 시공 사례 | {n}', '시공사례'], ['{A} {c} 견적 구조와 비용 절감 포인트', '정보성'], ['{a} 신축 입주 {c} 체크리스트 - {n}', '정보성'], ['{A} {c} 시공 후기 · 공정별 기록 ({n})', '시공사례']],
+    tasks: [
+      { t: '평형별 시공사례 포트폴리오 구축', d: '{a} 인근 아파트 평형별(24/32/45평) 시공 전후·비용 범위·공정 기간 게시', ch: 'home', imp: 3, eff: 3 },
+      { t: '쇼룸·상담 방문 예약 동선 개설', d: '네이버 예약 방문 상담 상품, 현장 실측 가능 지역 표기', ch: 'place', imp: 2, eff: 1 },
+      { t: '면허·하자보증 신뢰 정보 표기', d: '실내건축공사업 등록번호·보증 조건·AS 절차를 플레이스·홈페이지에 일관 표기', ch: 'info', imp: 2, eff: 1 }
+    ]
+  },
+  space: {
+    key: 'space', label: '숙박·공간대여·스튜디오', icon: 'fa-camera-retro', ind: '공간',
+    law: { name: '소방시설법 · 공중위생관리법/관광진흥법(해당 시)', summary: '영업 형태에 따라 신고·등록과 소방안전시설 기준을 충족해야 하며, 이용 규정·환불·추가요금은 예약 전에 명확히 고지해야 합니다.',
+      rules: ['영업 신고·소방안전시설 정보를 공시', '시간대별 요금·환불·추가요금 규정 사전 고지', '사진과 실제 공간의 일치성 유지 (과장 보정 지양)'] },
+    w: { place: 28, review: 18, blog: 10, home: 17, sns: 12, ads: 8, info: 7 },
+    homeLabel: '실시간 예약 채널', reviewLabel: '방문자 리뷰 관리', itemNoun: '공간 상품·요금',
+    focus: ['시간대별 실시간 예약', '감성 비주얼', '리뷰 신뢰도'],
+    defaultCore: '스튜디오', kwSuffix: ['대여', '예약', '추천'],
+    volMul: 0.8, reviewMul: 0.9, photoTarget: 80, compPer1k: 0.8, cpc: [200, 900],
+    cats: ['대여스튜디오', '공간대여'],
+    compPat: ['{a} 감성{c}', '{A} 더{c}', '{a} 모먼트 {c}', '{A} 오늘의{c}', '{a} 하루{c}', '{A} 플레이스 {c}'],
+    blogT: [['{a} {c} 대여 후기 | {n} 분위기·가격', '방문후기'], ['{A} {c} 예약 꿀팁 - 시간대별 요금 정리', '정보성'], ['{a} 감성 {c} 추천 {n} 촬영·모임 후기', '방문후기'], ['{A} {c} 이용 규정·주차 안내 ({n})', '정보성']],
+    tasks: [
+      { t: '시간대별 실시간 예약 연동', d: '네이버 예약 시간 단위 상품·요금표·추가 인원 규정 등록, 대기·취소 규정 명시', ch: 'home', imp: 3, eff: 2 },
+      { t: '감성 비주얼 사진·릴스 확충', d: '시간대(주간/야간)·용도별 촬영 사진 세트, 월 4건 릴스 업로드', ch: 'place', imp: 3, eff: 1 },
+      { t: '소방안전·이용 규정 공시', d: '영업 신고·소방시설 점검 정보, 이용 규정·환불 기준을 소개글·사진으로 공시', ch: 'info', imp: 2, eff: 1 }
+    ]
+  },
+  service: {
+    key: 'service', label: '생활서비스·자동차·수리', icon: 'fa-screwdriver-wrench', ind: '업체',
+    law: { name: '소비자기본법 · 표준약관 · 자동차관리법(정비)', summary: '견적 산출 근거와 추가 비용을 사전에 고지해야 하며, 자동차 정비는 견적서·점검기록부 교부 등 관련 규정을 준수해야 합니다.',
+      rules: ['견적 산출 근거·추가 비용을 사전에 투명 고지', '출장·긴급 출동 가능 지역 명시', '정비 시 견적서·점검기록부 교부 (자동차관리법)'] },
+    w: { place: 30, review: 15, blog: 8, home: 10, sns: 5, ads: 20, info: 12 },
+    homeLabel: '스마트콜·견적 채널', reviewLabel: '방문자 리뷰 관리', itemNoun: '서비스 항목·견적',
+    focus: ['긴급 키워드 광고', '스마트콜 착신', '위치 정확도'],
+    defaultCore: '수리', kwSuffix: ['긴급', '가격', '근처'],
+    volMul: 1.0, reviewMul: 0.4, photoTarget: 35, compPer1k: 1.8, cpc: [500, 2200],
+    cats: ['수리·정비', '생활서비스'],
+    compPat: ['{a} 24시 {c}', '{A} 믿음{c}', '{a} 빠른{c}', '{A} 365{c}', '{a} 으뜸{c}', '{A} 책임{c}'],
+    blogT: [['{a} {c} 긴급 출동 후기 | {n}', '방문후기'], ['{A} {c} 견적 비교 - 추가 비용 없는 업체 고르는 법', '정보성'], ['{a} {c} 가격표와 소요 시간 안내 ({n})', '정보성'], ['{A} {c} 맡기기 전 확인할 체크포인트', '정보성']],
+    tasks: [
+      { t: '스마트콜 착신·긴급 키워드 대응', d: '네이버 스마트콜 연결, 야간·긴급 문의 {a} {c} 키워드 광고와 연동, 부재중 콜백 규칙', ch: 'ads', imp: 3, eff: 2 },
+      { t: '투명 견적표·서비스 가격 공개', d: '항목별 기본 요금·추가 비용 조건을 플레이스 메뉴·사진으로 등록', ch: 'place', imp: 3, eff: 1 },
+      { t: '위치 정확도·출장 가능 지역 정비', d: '지도 핀·주차·출장 반경 표기 통일, 서비스 가능 지역명 소개글 반영', ch: 'info', imp: 2, eff: 1 }
+    ]
+  },
+  retail: {
+    key: 'retail', label: '일반 소매·쇼핑몰·유통', icon: 'fa-bag-shopping', ind: '매장',
+    law: { name: '전자상거래법 · 통신판매업 신고', summary: '통신판매업 신고번호·사업자 정보 표기, 청약철회·교환·반품 조건 고지 의무를 준수해야 합니다.',
+      rules: ['통신판매업 신고번호·사업자 정보 표기', '청약철회·교환·반품 조건 고지', '상품 상세 정보·원산지·인증 정보 정확 표기'] },
+    w: { place: 15, review: 20, blog: 8, home: 27, sns: 10, ads: 15, info: 5 },
+    homeLabel: '스마트스토어·쇼핑 연동', reviewLabel: '구매 리뷰 관리', itemNoun: '상품·카탈로그',
+    focus: ['스마트스토어·쇼핑탭', '카탈로그 연동', '쇼핑검색광고'],
+    defaultCore: '매장', kwSuffix: ['추천', '가격', '후기'],
+    volMul: 1.2, reviewMul: 1.3, photoTarget: 60, compPer1k: 2.5, cpc: [100, 600],
+    cats: ['판매점', '쇼핑몰'],
+    compPat: ['{a} {c} 마켓', '{A} 더{c}', '{a} 모아{c}', '{A} {c}몰', '{a} 라온{c}', '{A} {c}스토어'],
+    blogT: [['{a} {c} 추천 | {n} 실제 구매 후기', '구매후기'], ['{A} {c} 가격 비교 - 어디서 사야 할까?', '정보성'], ['{a} 오프라인 매장 {n} 방문기', '방문후기'], ['{A} {c} 선택 가이드 ({n} 신상품)', '정보성']],
+    tasks: [
+      { t: '스마트스토어·카탈로그 연동 구조 정비', d: '상품 카탈로그 매칭, 대표 이미지·옵션·배송 정보 표준화, 쇼핑탭 노출 기반 마련', ch: 'home', imp: 3, eff: 2 },
+      { t: '쇼핑검색광고·브랜드 키워드 방어', d: '{c} 핵심 상품 쇼핑검색광고 소액 테스트, 상호 브랜드 키워드 방어', ch: 'ads', imp: 2, eff: 2 },
+      { t: '상세페이지 법정 고지·구매 리뷰 구조화', d: '통신판매업 신고·반품 조건 상세 고지, 포토리뷰 작성 안내(대가 제공 시 표시)', ch: 'review', imp: 2, eff: 1 }
+    ]
+  }
+};
+const INDUSTRY_ORDER = ['medical', 'food', 'fitness', 'beauty', 'edu', 'legal', 'interior', 'space', 'service', 'retail'];
+
+/* ==========================================================================
+   2. 입력 파싱 · 주소/키워드 분석
+   ========================================================================== */
+const STOP_WORDS = new Set(['맛집', '추천', '가격', '후기', '리뷰', '근처', '배달', '예약', '비용', '잘하는', '잘하는곳', '순위', '베스트', '인기', '주변', '할인', '이벤트', '상담', '견적', '업체', '전문', '전문점', '본점', '가성비', '야간진료', '긴급', '체험', '대여', '수강료', '1등', 'best', 'BEST', 'top', 'TOP']);
+const AREA_CODE = { '서울': '02', '경기': '031', '인천': '032', '강원': '033', '충남': '041', '대전': '042', '충북': '043', '세종': '044', '부산': '051', '울산': '052', '대구': '053', '경북': '054', '경남': '055', '전남': '061', '광주': '062', '전북': '063', '제주': '064' };
+
+function shortName(s) { if (!s) return ''; return s.length > 2 ? s.replace(/(특별자치시|특별자치도|특별시|광역시|시|군|구)$/, '') : s; }
+
+function parseAddress(addr) {
+  const tokens = addr.replace(/[(),]/g, ' ').split(/\s+/).filter(Boolean);
+  const PROV = /^(서울|부산|대구|인천|광주|대전|울산|세종|경기|강원|충북|충남|전북|전남|경북|경남|제주)(특별시|광역시|특별자치시|특별자치도|도|시)?$/;
+  const r = { prov: '', city: '', gu: '', dong: '', road: '', first: tokens[0] || '' };
+  tokens.forEach(t => {
+    if (!r.prov && PROV.test(t)) { r.prov = t; return; }
+    if (!r.city && /^[가-힣]{2,}시$/.test(t)) { r.city = t; return; }
+    if (!r.gu && /^[가-힣]{1,}(구|군)$/.test(t)) { r.gu = t; return; }
+    if (!r.dong && /^[가-힣]{2,}[0-9]?(동|읍|면)$/.test(t)) { r.dong = t; return; }
+    if (!r.road && /[가-힣0-9]+(로|길)(\d+번길)?$/.test(t)) { r.road = t; }
+  });
+  return r;
+}
+
+function parseKeywords(raw) {
+  const seen = new Set(); const out = [];
+  String(raw || '').split(/[,，、\n]+/).map(s => s.trim().replace(/\s+/g, ' ')).filter(Boolean).forEach(k => {
+    const key = k.replace(/\s/g, '').toLowerCase();
+    if (!seen.has(key)) { seen.add(key); out.push(k); }
+  });
+  return out;
+}
+
+function buildGeo(inp, cfg) {
+  const p = parseAddress(inp.address);
+  const lg = inp.live && inp.live.geo;
+  if (lg) {
+    if (!p.prov && lg.r1) p.prov = lg.r1;
+    const toks = String(lg.r2 || '').split(/\s+/).filter(Boolean);
+    if (toks.length >= 2) { p.city = toks[0]; p.gu = toks[1]; }
+    else if (toks.length === 1) { if (/시$/.test(toks[0])) { p.city = toks[0]; p.gu = ''; } else { p.gu = toks[0]; p.city = ''; } }
+    if (lg.hdong || lg.bdong) p.dong = lg.hdong || lg.bdong;
+    if (lg.road) p.road = lg.road;
+  }
+  const kwTokens = inp.keywords.join(' ').split(/\s+/);
+  if (!p.dong) { const d = kwTokens.find(t => /^[가-힣]{2,}동$/.test(t)); if (d) p.dong = d; }
+  const station = (kwTokens.map(t => /^([가-힣]{2,})역$/.exec(t)).filter(Boolean)[0] || [])[1] || '';
+  const provShortRaw = p.prov ? p.prov.replace(/(특별자치시|특별자치도|특별시|광역시|도|시)$/, '') : '';
+  const metro = ['부산', '대구', '인천', '광주', '대전', '울산'];
+  let tier;
+  if (provShortRaw === '서울') tier = 1;
+  else if (metro.includes(provShortRaw)) tier = 2;
+  else if (provShortRaw === '경기' || provShortRaw === '세종') tier = 3;
+  else if (provShortRaw) tier = 4;
+  else tier = p.gu && !p.city ? 2 : 3;
+
+  const cityShortRaw = shortName(p.city), guShortRaw = shortName(p.gu);
+  const dongBase = p.dong ? p.dong.replace(/\d+(?=(동|읍|면)$)/, '') : '';
+  const dongShortRaw = dongBase ? dongBase.replace(/(동|읍|면)$/, '') : '';
+  const areaCityRaw = cityShortRaw || guShortRaw || provShortRaw || shortName(p.first) || '인근';
+  const aRaw = dongShortRaw || areaCityRaw;
+  const areaLocalRaw = dongBase || (station ? station + '역' : '') || p.road || areaCityRaw;
+
+  const areaWords = [p.prov, provShortRaw, p.city, cityShortRaw, p.gu, guShortRaw, p.dong, station && station + '역', station].filter(Boolean);
+  let core = '', core2 = '';
+  if (inp.detail) {
+    const t = inp.detail.replace(/중점|전문|위주|특화/g, ' ').split(/[·,\/\s&+]+/).filter(x => x.length >= 2);
+    if (t.length) { core = t[0]; core2 = t[1] || ''; }
+  }
+  if (!core) {
+    const freq = new Map();
+    kwTokens.forEach((t, i) => {
+      if (t.length < 2 || STOP_WORDS.has(t)) return;
+      if (areaWords.some(a => t === a || (a.length >= 2 && t.startsWith(a)))) return;
+      if (t.length >= 3 && /(동|역)$/.test(t)) return;
+      if (/^\d+$/.test(t)) return;
+      const f = freq.get(t) || { n: 0, i }; f.n++; freq.set(t, f);
+    });
+    const ranked = Array.from(freq.entries()).sort((x, y) => y[1].n - x[1].n || x[1].i - y[1].i).map(e => e[0]);
+    core = ranked[0] || cfg.defaultCore; core2 = ranked[1] || '';
+  }
+  return {
+    raw: { prov: p.prov, city: p.city, gu: p.gu, dong: p.dong, road: p.road, station, areaCity: areaCityRaw, areaLocal: areaLocalRaw, a: aRaw, core, core2, provShort: provShortRaw, cityShort: cityShortRaw, guShort: guShortRaw },
+    prov: esc(p.prov), provShort: esc(provShortRaw), city: esc(p.city), cityShort: esc(cityShortRaw), gu: esc(p.gu), dong: esc(p.dong), dongShort: esc(dongShortRaw),
+    road: esc(p.road), station: esc(station), areaCity: esc(areaCityRaw), areaLocal: esc(areaLocalRaw), a: esc(aRaw), core: esc(core), core2: esc(core2 || core),
+    tier, areaCode: AREA_CODE[provShortRaw] || (tier === 1 ? '02' : '031'), live: !!lg, hcode: lg ? lg.hcode : ''
+  };
+}
+
+/* ==========================================================================
+   3. 정밀 동적 분석 엔진
+   ========================================================================== */
+function fillTpl(str, M) {
+  return String(str).replace(/\{a\}/g, M.geo.a).replace(/\{A\}/g, M.geo.areaCity).replace(/\{c\}/g, M.geo.core).replace(/\{c2\}/g, M.geo.core2).replace(/\{b\}/g, M.blogTarget).replace(/\{n\}/g, M.name);
+}
+function ctrByRank(r) { return r <= 1 ? 0.28 : r <= 3 ? 0.16 : r <= 7 ? 0.075 : r <= 15 ? 0.032 : r <= 30 ? 0.011 : 0.003; }
+function gradeOf(s) { return s >= 85 ? 'A' : s >= 70 ? 'B' : s >= 40 ? 'C' : 'D'; }
+
+function analyzeMarketingMetrics(inp) {
+  const cfg = INDUSTRY_CONFIG[inp.industryKey];
+  const seed = hashSeed([inp.name, inp.address, inp.industryKey, inp.keywords.join('|')].join('::'));
+  const R = makeRng(seed);
+  const live = inp.live || {}, man = inp.manual || {};
+  const geo = buildGeo(inp, cfg);
+  const issued = parseISO(inp.date);
+  const M = { seed, cfg, geo, issued, issuedStr: ymd(issued), name: esc(inp.name), nameRaw: inp.name, address: esc(inp.address), issuer: esc(inp.issuer), docId: esc(inp.docId), detail: esc(inp.detail) };
+  M.industryFull = cfg.label + (inp.detail ? ' (' + esc(inp.detail) + ')' : '');
+  M.live = live; M.man = man; M.fixBand = inp.fixBand !== false; M.bizNo = inp.bizNo || '';
+  const hasN = v => v !== undefined && v !== null && v !== '' && Number.isFinite(+v);
+
+  /* ---- 3-1 상권·인구 ---- */
+  const densRange = [null, [14000, 20000], [8500, 13500], [6500, 10500], [2500, 5500]][geo.tier];
+  let density = R.range(densRange[0], densRange[1]);
+  let hhSize = geo.tier === 1 ? 2.15 : geo.tier === 2 ? 2.3 : 2.4;
+  const circleArea = Math.PI * 1 * 1;
+  const w0 = R.range(0.38, 0.5), w1 = R.range(0.2, 0.28), w2 = R.range(0.14, 0.2);
+  const ws = [w0, w1, w2, Math.max(0.06, 1 - w0 - w1 - w2)];
+  const wsum = ws.reduce((a, b) => a + b, 0);
+  const dirs = ['북측', '남측', '동측', '서측'];
+  const dirPick = R.shuffle(dirs);
+  const dongs = ws.map((w, i) => {
+    const inside = circleArea * (w / wsum);
+    const share = i === 0 ? R.range(0.55, 0.9) : R.range(0.3, 0.85);
+    const area = inside / share;
+    const dens = density * (i === 0 ? R.range(1.02, 1.2) : R.range(0.78, 1.15));
+    const popTotal = roundTo(area * dens, 10), popIn = roundTo(inside * dens, 10);
+    const name = i === 0 ? (geo.dong || (geo.gu ? geo.gu + ' 소재지 행정동' : (geo.city || geo.areaCity) + ' 소재지 행정동')) : '인접 행정동 ' + String.fromCharCode(64 + i) + ' (' + dirPick[i - 1] + ')';
+    return { name, area: +area.toFixed(2), share: Math.round(share * 100), popTotal, hhTotal: roundTo(popTotal / hhSize, 10), popIn, inside: +inside.toFixed(2) };
+  });
+  const lp = live.population && live.population.total > 0 ? live.population : null;
+  if (lp) {
+    const k = lp.total / dongs[0].popTotal;
+    density *= k;
+    if (lp.households > 0) hhSize = lp.total / lp.households;
+    dongs.forEach(d => { d.popTotal = roundTo(d.popTotal * k, 10); d.popIn = roundTo(d.popIn * k, 10); d.hhTotal = roundTo(d.popTotal / hhSize, 10); });
+    dongs[0].popTotal = lp.total; dongs[0].hhTotal = lp.households > 0 ? lp.households : dongs[0].hhTotal; dongs[0].live = true;
+  }
+  const pop1000 = dongs.reduce((a, d) => a + d.popIn, 0);
+  const hh1000 = roundTo(pop1000 / hhSize * R.range(0.97, 1.03), 10);
+  const pop500 = roundTo(pop1000 * R.range(0.22, 0.29), 10);
+  const hh500 = roundTo(pop500 / hhSize * R.range(0.97, 1.03), 10);
+  const jitterC = R.range(0.8, 1.25);
+  let c1000 = Math.max(6, Math.round(pop1000 / 1000 * cfg.compPer1k * jitterC));
+  let c500 = Math.max(2, Math.round(c1000 * R.range(0.28, 0.34)));
+  const pop2000 = roundTo(pop1000 * R.range(3.1, 3.7), 100), hh2000 = roundTo(pop2000 / hhSize, 100);
+  let c2000 = Math.round(c1000 * R.range(3.0, 3.6));
+  const lc = live.places && live.places.counts;
+  if (lc && hasN(lc[500]) && hasN(lc[1000]) && hasN(lc[2000])) { c500 = Math.max(1, +lc[500]); c1000 = Math.max(c500, +lc[1000]); c2000 = Math.max(c1000, +lc[2000]); M.compLive = true; }
+  const expectedPer = 1000 / cfg.compPer1k;
+  const ratio = (pop1000 / c1000) / expectedPer;
+  const intensity = r => r < 0.85 ? ['매우 높음', 'r'] : r < 1.0 ? ['높음', 'y'] : r < 1.2 ? ['보통', 'b'] : ['낮음', 'g'];
+  const resShare = Math.round(R.range(52, 70)), workShare = Math.round(R.range(14, 24));
+  const fac = {
+    station: Math.max(/역/.test(inp.keywords.join(' ')) ? 1 : 0, R.int(0, geo.tier <= 2 ? 3 : 2)),
+    school: R.int(3, 9), apt: geo.tier >= 3 ? R.int(6, 18) : R.int(4, 14), mart: R.int(1, 4), office: R.int(2, 8)
+  };
+  M.demo = {
+    density: Math.round(density), hhSize, dongs, pop500, hh500, pop1000, hh1000, pop2000, hh2000, c500, c1000, c2000, fac,
+    perShop1000: Math.round(pop1000 / c1000), perShop500: Math.round(pop500 / c500), perShop2000: Math.round(pop2000 / c2000), popLive: !!lp, popYm: lp ? lp.ym : '', popName: lp ? esc(lp.name || '') : '',
+    int500: intensity(ratio * R.range(0.92, 1.1)), int1000: intensity(ratio), int2000: intensity(ratio * R.range(1.0, 1.18)),
+    demandIdx: clamp(Math.round(58 + (ratio - 1) * 40 + R.range(-6, 8)), 35, 88), resShare, workShare, floatShare: 100 - resShare - workShare,
+    singleShare: Math.round(R.range(24, 42)), age2030: Math.round(R.range(26, 40))
+  };
+
+  /* ---- 3-2 경쟁사 명칭 매핑 ---- */
+  const names = [];
+  R.shuffle(cfg.compPat).forEach(p => {
+    const nm = fillTpl(p, M);
+    if (names.length < 4 && !names.includes(nm) && nm.replace(/\s/g, '') !== M.name.replace(/\s/g, '')) names.push(nm);
+  });
+  const liveTop = ((live.places && live.places.top) || []).slice(0, 4);
+  const nLiveComp = liveTop.length;
+  if (nLiveComp) { for (let i = 0; i < 4; i++) { if (i < nLiveComp) names[i] = esc(liveTop[i].name); } }
+  M.compLiveN = nLiveComp;
+
+  /* ---- 3-3 키워드 ---- */
+  const kwSet = inp.keywords.slice(0, 6).map(k => ({ raw: k, supp: false }));
+  const have = new Set(kwSet.map(k => k.raw.replace(/\s/g, '').toLowerCase()));
+  const g = geo.raw;
+  const sfx = cfg.kwSuffix;
+  const cands = [
+    g.areaCity + ' ' + g.core, g.areaLocal + ' ' + g.core, g.areaCity + ' ' + g.core + ' ' + sfx[0], g.a + ' ' + g.core + ' ' + sfx[1],
+    g.areaCity + ' ' + g.core + ' ' + sfx[1], g.a + ' ' + sfx[0], g.areaCity + ' ' + sfx[0], g.a + ' ' + g.core + ' ' + sfx[2], g.areaCity + ' ' + g.core + ' ' + sfx[2], g.areaLocal + ' ' + g.core + ' ' + sfx[0],
+    g.areaCity + ' ' + g.core + ' 후기', g.a + ' ' + g.core + ' 가격', g.areaCity + ' ' + g.core + ' 예약', g.a + ' ' + g.core + ' 추천', g.areaCity + ' ' + g.core + ' 비교', g.areaCity + ' ' + g.core + ' 인기', g.areaLocal + ' ' + sfx[1], g.areaCity + ' 인기 ' + g.core, g.areaCity + ' 좋은 ' + g.core
+  ];
+  for (const c of cands) {
+    if (kwSet.length >= 6) break;
+    const key = c.replace(/\s/g, '').toLowerCase();
+    if (!have.has(key)) { have.add(key); kwSet.push({ raw: c, supp: true }); }
+  }
+  const tierBase = [0, 9000, 5500, 3200, 1500][geo.tier] * cfg.volMul;
+  const kws = kwSet.map((k, i) => {
+    const t = k.raw;
+    const hasDong = g.dong && t.includes(g.dong), hasDongShort = g.a && g.dong && t.includes(g.a + '동');
+    const hasStation = /역/.test(t);
+    const hasAreaCity = [g.cityShort, g.guShort, g.provShort].filter(Boolean).some(a => t.includes(a));
+    let f = 1;
+    if (/맛집|추천|잘하는|베스트|인기/.test(t)) f *= 1.5;
+    if (hasDong || hasDongShort) f *= 0.32; else if (hasStation) f *= 0.42;
+    if (/배달|포장/.test(t)) f *= 0.6;
+    if (/가격|비용|견적|후기|수강료/.test(t)) f *= 0.45;
+    if (/근처|주변/.test(t)) f *= 0.8;
+    if (!hasAreaCity && !hasDong && !hasStation) f *= 1.25;
+    const vol = Math.max(60, roundTo(tierBase * f * R.range(0.75, 1.3), 10));
+    const mobPct = Math.round(R.range(80, 89));
+    const spec = (hasDong || hasDongShort || hasStation) ? 'local' : (hasAreaCity && !/맛집|추천|베스트|인기/.test(t) ? 'mid' : 'broad');
+    const rank0 = spec === 'local' ? R.int(3, 13) : spec === 'mid' ? R.int(10, 27) : R.int(24, 58);
+    return { idx: i, raw: t, kw: esc(t), supp: k.supp, vol, mobPct, spec, rank: rank0, comp: Math.round(R.range(35, 92)) };
+  });
+  const compMap = { '높음': 82, '중간': 58, '낮음': 32 };
+  const lkMap = {};
+  ((live.keywords && live.keywords.items) || []).forEach(it => { lkMap[String(it.kw).replace(/\s/g, '').toLowerCase()] = it; });
+  const manRanks = Array.isArray(man.ranks) ? man.ranks : [];
+  kws.forEach((k, i) => {
+    const it = lkMap[k.raw.replace(/\s/g, '').toLowerCase()];
+    if (it && it.total > 0) { k.vol = it.total; k.mobPct = Math.round(it.mobile / it.total * 100); k.comp = compMap[it.compIdx] || k.comp; k.volLive = true; k.plDepth = it.plAvgDepth; }
+    if (!k.supp && hasN(manRanks[i]) && +manRanks[i] >= 1) { k.rank = Math.min(99, Math.round(+manRanks[i])); k.rankManual = true; }
+  });
+  const order = kws.filter(k => !k.rankManual).sort((a, b) => a.rank - b.rank || a.idx - b.idx);
+  const nKeep = Math.max(1, Math.round(order.length * 0.34)), nFind = Math.max(1, Math.round(order.length * 0.34));
+  kws.filter(k => k.rankManual).forEach(k => { k.cat = k.rank <= 7 ? '지키기' : k.rank <= 30 ? '올리기' : '발굴'; });
+  order.forEach((k, i) => {
+    if (i < nKeep) { k.cat = '지키기'; k.rank = clamp(k.rank, 3, 7); }
+    else if (i >= order.length - nFind) { k.cat = '발굴'; k.rank = clamp(Math.max(k.rank, 31 + R.int(0, 12)), 31, 65); }
+    else { k.cat = '올리기'; k.rank = clamp(k.rank, 9, 28); }
+  });
+  const compW = [0.4, 0.3, 0.2, 0.1];
+  kws.forEach(k => {
+    let x = R.next(), acc = 0, ci = 0;
+    for (let i = 0; i < compW.length; i++) { acc += compW[i]; if (x <= acc) { ci = i; break; } }
+    k.top = ci;
+    k.est = Math.round(k.vol * ctrByRank(k.rank));
+    k.potential = Math.round(k.vol * ctrByRank(3));
+    k.cpc = roundTo(R.range(cfg.cpc[0], cfg.cpc[1]) * (k.spec === 'broad' ? 1.15 : k.spec === 'local' ? 0.7 : 0.95), 10);
+  });
+  M.kws = kws;
+  M.kwAgg = {
+    totalVol: kws.reduce((a, k) => a + k.vol, 0), est: kws.reduce((a, k) => a + k.est, 0), potential: kws.reduce((a, k) => a + k.potential, 0),
+    avgRank: Math.round(kws.reduce((a, k) => a + Math.min(k.rank, 60), 0) / kws.length * 10) / 10,
+    best: kws.slice().sort((a, b) => a.rank - b.rank)[0], worst: kws.slice().sort((a, b) => b.rank - a.rank)[0],
+    topVol: kws.slice().sort((a, b) => b.vol - a.vol), suppCount: kws.filter(k => k.supp).length
+  };
+  M.kwAgg.captureRate = Math.round(M.kwAgg.est / M.kwAgg.potential * 100);
+
+  /* ---- 3-4 플레이스 · 블로그 · 경쟁사 수치 ---- */
+  const reviewsModel = Math.max(12, Math.round(R.range(45, 210) * cfg.reviewMul * (geo.tier >= 3 ? 1 : 1.1)));
+  const reviews = hasN(man.reviews) ? Math.max(0, Math.round(+man.reviews)) : reviewsModel;
+  const rb = Math.max(1, reviews);
+  const comps = names.map((nm, i) => {
+    const k = [R.range(2.8, 4.8), R.range(2.0, 3.4), R.range(1.5, 2.6), R.range(1.2, 2.0)][i];
+    return {
+      name: nm, live: i < nLiveComp, dist: i < nLiveComp ? liveTop[i].distance : 0, reviews: Math.round(rb * k), blogRev: Math.round(rb * k * R.range(0.3, 0.6)), photos: Math.round(R.range(30, 95)),
+      news: R.int(2, 12), reply: R.int(3, 10), ads: R.chance(0.7 - i * 0.12), rating: +R.range(4.2, 4.8).toFixed(2), blog30: Math.round(R.range(12, 38) * (1 - i * 0.12)),
+      avgRank: +(R.range(1.5, 5 + i * 3)).toFixed(1), phoneOk: R.chance(0.85)
+    };
+  });
+  const photosModel = R.int(8, 19);
+  const photos = hasN(man.photos) ? Math.max(0, Math.round(+man.photos)) : photosModel;
+  const place = {
+    reviews, blogRev: Math.round(rb * R.range(0.25, 0.55)), photos, photoTarget: cfg.photoTarget, news: 0, newsTarget: 4,
+    reply: R.int(8, 10), rating: +R.range(4.15, 4.65).toFixed(2), cat: R.pick(cfg.cats)
+  };
+  if (hasN(man.news)) place.news = Math.max(0, Math.round(+man.news));
+  if (hasN(man.reply)) place.reply = clamp(Math.round(+man.reply), 0, 10);
+  if (hasN(man.rating)) place.rating = clamp(+(+man.rating).toFixed(2), 1, 5);
+  const compAvg = k => Math.round(comps.reduce((a, c) => a + c[k], 0) / comps.length);
+  M.comps = comps; M.place = place;
+  const blogTargetCalc = () => Math.max(4, Math.min(16, Math.round(M.compAvg.blog30 * 0.6)));
+  M.compAvg = { reviews: compAvg('reviews'), blogRev: compAvg('blogRev'), photos: compAvg('photos'), news: compAvg('news'), blog30: compAvg('blog30'), reply: compAvg('reply') };
+
+  const blog30 = R.int(2, 9);
+  M.blogTarget = blogTargetCalc();
+  M.blog = { blog30, share: Math.round(R.range(0, 9)), compShare: Math.round(R.range(22, 38)) };
+  const lb = {}; ((live.blog && live.blog.items) || []).forEach(it => { lb[String(it.q).replace(/\s/g, '')] = it.total; });
+  const ownTot = lb[inp.name.replace(/\s/g, '')];
+  if (hasN(ownTot)) M.blog.mentions = +ownTot;
+  comps.forEach((c, i) => { if (c.live) { const t = lb[liveTop[i].name.replace(/\s/g, '')]; if (hasN(t)) c.blogTotal = +t; } });
+  let adsOn = R.chance(0.28);
+  if (man.ads === 'on') adsOn = true; else if (man.ads === 'off') adsOn = false;
+  const kwAdsOn = kws.map(() => adsOn && R.chance(0.45));
+  M.ads = { on: adsOn, placeAd: adsOn && R.chance(0.5), kwOn: kwAdsOn, compCount: kws.map(k => (k.volLive && hasN(k.plDepth)) ? Math.round(k.plDepth) : R.int(2, 5)), brandSearch: R.chance(0.15) };
+  M.ads.budget = Math.max(300000, Math.min(3000000, roundTo(M.kwAgg.topVol.slice(0, 3).reduce((a, k) => a + k.vol * 0.018 * k.cpc, 0), 100000)));
+
+  /* ---- 3-5 4대 지도 채널 ---- */
+  const maps = [
+    { key: 'naver', label: '네이버 지도', icon: 'fa-n', reg: true, name: true, addr: true, tel: R.chance(0.8), photos: place.photos, rev: place.reviews },
+    { key: 'kakao', label: '카카오맵', icon: 'fa-comment', reg: R.chance(0.88), name: R.chance(0.82), addr: R.chance(0.82), tel: R.chance(0.6), photos: R.int(1, 9), rev: Math.round(place.reviews * R.range(0.1, 0.4)) },
+    { key: 'google', label: '구글 지도', icon: 'fa-google', reg: R.chance(0.82), name: R.chance(0.78), addr: R.chance(0.78), tel: R.chance(0.6), photos: R.int(0, 14), rev: Math.round(place.reviews * R.range(0.05, 0.3)) },
+    { key: 'tmap', label: '티맵', icon: 'fa-location-arrow', reg: R.chance(0.7), name: R.chance(0.72), addr: R.chance(0.74), tel: R.chance(0.5), photos: R.int(0, 6), rev: Math.round(place.reviews * R.range(0, 0.15)) }
+  ];
+  const mapCells = () => { const arr = []; maps.forEach(m => { if (m.key === 'naver') return; arr.push([m, 'name'], [m, 'addr'], [m, 'tel']); }); return arr; };
+  const buildMapIssues = () => {
+    const list = [];
+    maps.forEach(m => {
+      if (!m.reg) { list.push({ sev: '상', m, text: '장소 미등록 — 해당 앱 길찾기·검색 유입 전면 손실', fix: '신규 등록 및 소유자 인증' }); return; }
+      if (!m.name) list.push({ sev: '중', m, text: '상호 표기가 플레이스와 상이 (' + M.name + ' 불일치)', fix: '상호·지점명 통일' });
+      if (!m.addr) list.push({ sev: '중', m, text: '주소·좌표 표기 불일치 (핀 위치 확인 필요)', fix: '도로명 주소·핀 위치 보정' });
+      if (!m.tel) list.push({ sev: '중', m, text: '전화번호·영업시간 누락 또는 상이', fix: '대표번호·영업시간 갱신' });
+      if (m.key !== 'naver' && m.photos < 5) list.push({ sev: '하', m, text: '등록 사진 ' + m.photos + '장 (최소 5장 권장)', fix: '대표 사진 5장 이상 등록' });
+    });
+    return list;
+  };
+  let guard = 0;
+  while (buildMapIssues().length < 4 && guard++ < 20) { const c = R.pick(mapCells()); if (c[0].reg) c[0][c[1]] = false; }
+  maps.forEach(m => { if (!m.reg) { m.name = m.addr = m.tel = false; m.photos = 0; m.rev = 0; } });
+  const cellTotal = maps.length * 4;
+  const cellOk = maps.reduce((a, m) => a + (m.reg ? 1 : 0) + (m.reg && m.name ? 1 : 0) + (m.reg && m.addr ? 1 : 0) + (m.reg && m.tel ? 1 : 0), 0);
+  M.maps = maps; M.mapIssueList = buildMapIssues(); M.mapIssues = M.mapIssueList.length; M.consist = cellOk / cellTotal;
+
+  /* ---- 3-6 플레이스 체크리스트 ---- */
+  const noun = cfg.itemNoun;
+  const photoRatio = place.photos / place.photoTarget;
+  const chk = [
+    { item: '대표·내부·' + noun + ' 사진', now: place.photos + '장', std: place.photoTarget + '장 이상', st: photoRatio < 0.5 ? '미흡' : '보완', fix: '카테고리별 앨범 구성, 월 ' + Math.max(8, Math.round((place.photoTarget - place.photos) / 3)) + '장 확충' },
+    { item: '영업시간·휴무·브레이크타임', now: R.chance(0.6) ? '기본 입력' : '일부 누락', std: '요일별 전 항목', st: null, fix: '공휴일·라스트오더 등 예외 시간 표기' },
+    { item: noun + ' 등록', now: R.chance(0.55) ? '일부 등록' : '등록 완료', std: '전 항목+가격', st: null, fix: '대표 항목 상단 고정, 가격·설명 일치' },
+    { item: '소식(최근 30일)', now: place.news + '건', std: '월 4건 이상', st: place.news >= 4 ? '양호' : place.news >= 1 ? '보완' : '미흡', fix: '주 1회 정기 발행, 이벤트·신규 공지' },
+    { item: '예약·톡톡·전화 연결', now: R.chance(0.5) ? '전화만 연결' : '예약 미연동', std: '예약+톡톡+전화', st: null, fix: '네이버 예약·톡톡 개설 및 연동' },
+    { item: '대표 키워드·소개글', now: R.chance(0.5) ? '키워드 2~3개' : '소개글 짧음', std: '키워드 5개+소개글', st: null, fix: '핵심 키워드 5개 지정, 소개글 지역·특징 반영' }
+  ];
+  const stPool = ['양호', '보완', '보완', '미흡'];
+  chk.forEach(c => { if (!c.st) c.st = R.pick(stPool); });
+  if (!chk.some(c => c.st === '양호')) chk[1].st = '양호';
+  chk.forEach(c => { if (c.st === '양호') { if (c === chk[1]) c.now = '요일별 입력 완료'; if (c === chk[2]) c.now = '등록 완료'; if (c === chk[4]) c.now = '예약·전화 연결'; if (c === chk[5]) c.now = '키워드 5개 설정'; } });
+  M.chk = chk;
+  M.chkOk = chk.filter(c => c.st === '양호').length;
+
+  /* ---- 3-7 채널별 점수 산정 (42~57점 대역으로 정합) ---- */
+  const sumEx = 100 - cfg.w.sns;
+  const wn = {}; let acc = 0; let maxK = 'place';
+  CHANNEL_KEYS.forEach(k => { wn[k] = Math.round(cfg.w[k] / sumEx * 100); acc += wn[k]; if (cfg.w[k] > cfg.w[maxK]) maxK = k; });
+  wn[maxK] += 100 - acc;
+  const avgRank = M.kwAgg.avgRank;
+  const sig = {
+    place: 0.3 * Math.min(photoRatio, 1) + 0.2 * Math.min(place.news / 4, 1) + 0.15 * place.reply / 10 + 0.2 * (M.chkOk / 6) + 0.15 * clamp(1 - avgRank / 60, 0, 1) + 0.14,
+    review: 0.8 * Math.min(reviews / M.compAvg.reviews, 1) + 0.2 * place.reply / 10 + 0.08,
+    blog: Math.min(blog30 / M.compAvg.blog30, 1) * 0.9 + 0.14,
+    home: R.range(0.22, 0.58),
+    ads: adsOn ? R.range(0.42, 0.6) : R.range(0.1, 0.3),
+    info: M.consist
+  };
+  const sc = {};
+  const target = 42 + Math.floor(R.next() * 16);
+  const totalF = () => CHANNEL_KEYS.reduce((a, k) => a + sc[k] * wn[k] / 100, 0);
+  const fitScores = extra => {
+    const lo = {}, hi = {};
+    CHANNEL_KEYS.forEach(k => { const base = clamp(Math.round(sig[k] * 100), 12, 88); sc[k] = base; lo[k] = Math.max(10, base - extra); hi[k] = Math.min(90, base + extra); });
+    for (let i = 0; i < 80; i++) {
+      const d = target - totalF(); if (Math.abs(d) < 0.45) break;
+      CHANNEL_KEYS.forEach(k => { sc[k] = clamp(Math.round(sc[k] + d * (0.6 + R.next() * 0.8)), lo[k], hi[k]); });
+    }
+    return Math.round(totalF());
+  };
+  let total = 0;
+  if (M.fixBand) {
+    for (let extra = 10; extra <= 70; extra += 6) { total = fitScores(extra); if (total >= 42 && total <= 57) break; }
+    let safety = 0;
+    while ((total < 42 || total > 57) && safety++ < 60) { const dir = total < 42 ? 1 : -1; CHANNEL_KEYS.forEach(k => { sc[k] = clamp(sc[k] + dir, 10, 90); }); total = Math.round(totalF()); }
+  } else {
+    CHANNEL_KEYS.forEach(k => { sc[k] = clamp(Math.round(sig[k] * 100), 3, 98); });
+    total = Math.round(totalF());
+  }
+  const chLabels = { place: '네이버 플레이스', review: cfg.reviewLabel, blog: '블로그 바이럴', home: cfg.homeLabel, ads: '광고 운영', info: '정보 일관성' };
+  const chIcons = { place: 'fa-location-dot', review: 'fa-star', blog: 'fa-pen-nib', home: cfg.key === 'retail' ? 'fa-store' : 'fa-globe', ads: 'fa-bullhorn', info: 'fa-link' };
+  const channels = CHANNEL_KEYS.map(k => ({ key: k, label: chLabels[k], icon: chIcons[k], wRaw: cfg.w[k], w: wn[k], s: sc[k], pts: +(sc[k] * wn[k] / 100).toFixed(1) }));
+  const grade = M.fixBand ? 'C' : gradeOf(total);
+  const gradeLabel = { A: '업계 상위권', B: '양호 · 일부 보완 필요', C: '경쟁사에 밀리는 중', D: '경쟁에서 크게 뒤처짐' }[grade];
+  M.score = { total, grade, label: M.fixBand ? '경쟁사에 밀리는 중' : gradeLabel, channels, target, sumEx, fixed: M.fixBand,
+    col: { A: '#16a34a', B: '#2563eb', C: '#f59e0b', D: '#dc2626' }[grade], colLight: { A: '#86efac', B: '#93c5fd', C: '#fbbf24', D: '#fca5a5' }[grade], colDark: { A: '#166534', B: '#1d4ed8', C: '#b45309', D: '#b91c1c' }[grade], onCol: grade === 'C' ? '#0f172a' : '#fff' };
+  const byS = channels.slice().sort((a, b) => b.s - a.s);
+  M.chBest = byS[0]; M.chWorst = byS[byS.length - 1];
+  M.chMap = {}; channels.forEach(c => { M.chMap[c.key] = c; });
+  M.bench = {}; CHANNEL_KEYS.forEach(k => { M.bench[k] = clamp(sc[k] + R.int(16, 31), 55, 88); });
+
+  /* ---- 3-8 운영 방식 추정 ---- */
+  const agencyProb = Math.round(clamp(14 + (adsOn ? 10 : 0) + (blog30 > 6 ? 6 : 0) + (place.reply >= 9 ? 5 : 0) + R.range(0, 8), 12, 42));
+  const sig13 = [
+    { sig: '소식(공지) 최근 30일 ' + place.news + '건', hint: place.news >= 4 ? '소식 정기 발행 흔적 (운영 주체는 불명)' : '플레이스 정기 관리 체계 부재', dir: place.news >= 4 ? '부분 위탁 가능' : '자체 운영 시사', hit: true },
+    { sig: '리뷰 답글 ' + place.reply + '/10 응답', hint: place.reply >= 9 ? '사장님이 직접 응대하는 패턴, 문체 편차 존재' : '응답률은 양호하나 응대 템플릿 일관성은 낮음', dir: '자체 운영 시사', hit: true },
+    { sig: '광고(파워링크·플레이스 광고) ' + (adsOn ? '일부 집행 흔적' : '집행 흔적 없음'), hint: adsOn ? '광고 계정 운영 가능성 (관리 대행 여부는 불명)' : '유료 채널 위탁 신호 미포착', dir: adsOn ? '부분 위탁 가능' : '대행 비시사', hit: true },
+    { sig: '블로그 최근 30일 게시 ' + blog30 + '건 (작성자 중복 ' + (blog30 > 6 ? '일부' : '없음') + ')', hint: blog30 > 6 ? '체험·협찬성 게시 패턴 일부 포착' : '정기 발행 체계 미확인', dir: blog30 > 6 ? '부분 위탁 가능' : '자체 운영 시사', hit: true },
+    { sig: '대표 사진 최종 업로드 시점 90일 이상', hint: '촬영·업로드 주기 관리 미흡', dir: '자체 운영 시사', hit: R.chance(0.7) },
+    { sig: '지도 4개 채널 정보 불일치 ' + M.mapIssues + '건', hint: '통합 관리 도구·담당자 부재 정황', dir: '자체 운영 시사', hit: true }
+  ];
+  M.ops = { agencyProb, signals: sig13.filter(s => s.hit).slice(0, 5), verdict: agencyProb < 25 ? '자체 운영 (대행 미이용 추정)' : '부분 위탁 가능성 (일부 채널)' };
+
+  /* ---- 3-9 블로그 표본 ---- */
+  const posts = [];
+  const tmpl = cfg.blogT;
+  for (let i = 0; i < 4; i++) {
+    const [t, type] = tmpl[i % tmpl.length];
+    const title = fillTpl(t, M);
+    posts.push({ date: ymd(addDays(issued, -R.int(2 + i * 6, 8 + i * 9))), title, own: true, type, hasName: title.includes(M.name), hasArea: title.includes(geo.a) || title.includes(geo.areaCity), hasCore: title.includes(geo.core), blogger: String.fromCharCode(97 + R.int(0, 25)) + '***' + R.int(10, 99) });
+  }
+  const cn = comps;
+  posts.push({ date: ymd(addDays(issued, -R.int(3, 14))), title: fillTpl('{A} {c} 추천 BEST 3 (' + cn[0].name + ' vs ' + cn[1].name + ')', M), own: false, type: '정보성', hasName: false, hasArea: true, hasCore: true, blogger: String.fromCharCode(97 + R.int(0, 25)) + '***' + R.int(10, 99) });
+  posts.push({ date: ymd(addDays(issued, -R.int(5, 20))), title: fillTpl(cn[0].name + (cfg.key === 'medical' || cfg.key === 'legal' ? ' 이용 안내 | {a}에서 {c} 찾는다면' : ' 방문 후기 | {a}에서 {c} 찾는다면'), M), own: false, type: cfg.key === 'medical' || cfg.key === 'legal' ? '정보성' : '방문후기', hasName: false, hasArea: true, hasCore: true, blogger: String.fromCharCode(97 + R.int(0, 25)) + '***' + R.int(10, 99) });
+  posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+  M.posts = posts;
+
+  /* ---- 3-10 과제 · 로드맵 ---- */
+  const commonTasks = [
+    { t: '플레이스 기본정보·사진·소식 전면 정비', d: '사진 ' + place.photos + '장 → ' + place.photoTarget + '장 확충, 소식 주 1회(월 4건↑) 발행, 대표 키워드 5개 재설정', ch: 'place', imp: 3, eff: 1 },
+    { t: '4대 지도 채널 정보 일원화', d: '네이버·카카오·구글·티맵 상호/주소/전화/영업시간 통일, 불일치·미등록 ' + M.mapIssues + '건 해소', ch: 'info', imp: 2, eff: 1 },
+    { t: cfg.key === 'medical' ? '방문자 리뷰 자연 유입 동선 정비 (대가성 후기 배제)' : '리뷰 관리 체계 구축', d: '답글 ' + place.reply + '/10 → 10/10 유지, 방문 후 리뷰 안내 동선(QR·안내문) 설계' + (cfg.key === 'medical' ? ', 의료법 제56조 준수' : ', 대가 제공 시 표시 의무 준수'), ch: 'review', imp: 2, eff: 1 }
+  ];
+  const tasks = cfg.tasks.concat(commonTasks).map(t => {
+    const c = M.chMap[t.ch];
+    const gain = Math.max(2, Math.round((92 - c.s) * c.w / 100 * R.range(0.3, 0.42)));
+    return { t: fillTpl(t.t, M), d: fillTpl(t.d, M), ch: t.ch, chLabel: c.label, imp: t.imp, eff: t.eff, gain, wk: t.eff === 1 ? '1~3주' : t.eff === 2 ? '3~6주' : '6~10주' };
+  });
+  tasks.sort((a, b) => b.imp - a.imp || a.eff - b.eff || b.gain - a.gain);
+  const gainSum = tasks.reduce((a, t) => a + t.gain, 0);
+  const proj = M.fixBand ? clamp(total + gainSum, 70, 82) : clamp(total + gainSum, Math.min(total + 3, 98), 98);
+  const sortedGain = tasks.map(t => t.gain).sort((a, b) => a - b);
+  const medGain = sortedGain[Math.floor(sortedGain.length / 2)];
+  tasks.forEach((t, i) => { t.no = i + 1; t.hi = t.gain >= medGain && t.imp >= 2; t.effHigh = t.eff >= 2; });
+  M.tasks = tasks; M.proj = proj; M.gainSum = gainSum;
+  const up = kws.filter(k => k.cat === '올리기'), find = kws.filter(k => k.cat === '발굴'), keep = kws.filter(k => k.cat === '지키기');
+  const upAvg = up.length ? Math.round(up.reduce((a, k) => a + k.rank, 0) / up.length) : 15;
+  M.road = { upAvg, upTarget: Math.max(3, Math.round(upAvg * 0.35)), blogTarget: M.blogTarget, reviewTarget: Math.max(Math.round(place.reviews * 1.35), place.reviews + 5), findTarget: find.length ? Math.round(find[0].rank * 0.5) : 15, up, find, keep };
+
+  /* ---- 3-11 강점 · 보완점 · 기회 ---- */
+  const bk = M.kwAgg.best;
+  M.swo = {
+    s: [
+      '핵심 키워드 \'' + bk.kw + '\' 플레이스 <b>' + rk(bk.rank) + '</b> 확보 (월 ' + nf(bk.vol) + '회)',
+      place.reply >= 7 ? '리뷰 답글 <b>' + place.reply + '/10</b> 응답으로 사장님 응대 신뢰도 양호' : '분석 키워드 ' + kws.length + '개 합산 월 <b>' + nf(M.kwAgg.totalVol) + '회</b>의 검색 수요 확인',
+      M.chBest.label + ' <b>' + M.chBest.s + '점</b>으로 6개 채널 중 가장 높은 수준'
+    ],
+    w: [
+      '최근 30일 소식 <b>' + place.news + '건</b>' + (place.news >= 4 ? ' (권장 충족)' : '') + ' · 사진 ' + place.photos + '장 (권장 ' + place.photoTarget + '장 대비 ' + Math.round(photoRatio * 100) + '%)',
+      '방문자 리뷰 ' + nf(reviews) + '건 — 상권 경쟁업체 평균 ' + nf(M.compAvg.reviews) + '건의 ' + Math.round(reviews / M.compAvg.reviews * 100) + '% 수준',
+      M.chWorst.label + ' <b>' + M.chWorst.s + '점</b> — 가장 낮은 채널, 지도 정보 불일치 ' + M.mapIssues + '건'
+    ],
+    o: [
+      '\'발굴\' 키워드 ' + find.length + '개 합산 월 <b>' + nf(find.reduce((a, k) => a + k.vol, 0)) + '회</b> 미개척 수요',
+      '반경 1km 인구 ' + nf(pop1000) + '명 · 동종 ' + c1000 + '곳으로 업소당 수요 ' + nf(Math.round(pop1000 / c1000)) + '명',
+      '90일 개선 시 종합 <b>' + total + '점 → ' + proj + '점(' + gradeOf(proj) + ')</b> ' + (proj > total ? '도약 가능' : '유지 가능')
+    ]
+  };
+  return M;
+}
+
+/* ==========================================================================
+   4. 리포트 렌더링 (15 페이지)
+   ========================================================================== */
+const TOTAL_PAGES = 15;
+
+const REPORT_CSS = `
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#fff}
+body{font-family:'Pretendard Variable',Pretendard,-apple-system,'Malgun Gothic','Noto Sans KR',sans-serif;color:#0f172a;font-size:10.5px;line-height:1.5;word-break:keep-all;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4;margin:0}
+.page{width:210mm;height:297mm;padding:9mm 12mm 7mm;display:flex;flex-direction:column;background:#fff;position:relative;overflow:hidden;break-after:page;page-break-after:always}
+.page:last-child{break-after:auto;page-break-after:auto}
+.ph{display:flex;justify-content:space-between;align-items:center;padding-bottom:6px;border-bottom:1.6px solid #0f172a;font-size:9.5px;color:#475569}
+.ph b{color:#0f172a;font-weight:800}
+.ph .brand{display:flex;align-items:center;gap:5px;font-weight:700;color:#166534}
+.pb{flex:1;min-height:0;display:flex;flex-direction:column;justify-content:flex-start;margin-top:14px;gap:9px}
+.pf{display:flex;justify-content:space-between;align-items:center;padding-top:6px;border-top:1px solid #cbd5e1;font-size:8.5px;color:#64748b}
+.pn{font-weight:800;color:#0f172a;font-size:10.5px;letter-spacing:.02em}
+.zw{display:flex;flex-direction:column;gap:9px;justify-content:flex-start}
+.zw>*{flex:none}
+.bar.ov{overflow:visible;position:relative}
+.bar.ov b{position:absolute;top:-3px;width:2px;height:13px;background:#0f172a;border-radius:1px}
+.pt{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid #16a34a;padding-bottom:6px}
+.pt h2{font-size:18px;font-weight:800;letter-spacing:-.02em}
+.pt-l{display:flex;align-items:center;gap:8px}
+.pt-no{background:#16a34a;color:#fff;border-radius:5px;padding:1px 7px;font-size:10.5px;font-weight:800}
+.pt-sub{font-size:9.5px;color:#64748b}
+.st{font-size:11.5px;font-weight:800;color:#0f172a;display:flex;align-items:center;gap:6px}
+.st:before{content:'';width:4px;height:12px;background:#16a34a;border-radius:2px;display:inline-block}
+.card{border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px;background:#fff}
+.card.dk{background:#0f172a;color:#fff;border-color:#0f172a}
+.card.gr{background:#f0fdf4;border-color:#bbf7d0}
+.card.am{background:#fffbeb;border-color:#fde68a}
+.card.rd{background:#fef2f2;border-color:#fecaca}
+.card.bl{background:#eff6ff;border-color:#bfdbfe}
+.card.sl{background:#f8fafc}
+.g2,.g3,.g4,.g6{display:grid;gap:8px}
+.g2{grid-template-columns:repeat(2,1fr)}.g3{grid-template-columns:repeat(3,1fr)}.g4{grid-template-columns:repeat(4,1fr)}.g6{grid-template-columns:repeat(6,1fr)}
+.row{display:flex;gap:10px;align-items:stretch}
+.tb{width:100%;border-collapse:collapse;font-size:9.5px}
+.tb th{background:#f1f5f9;color:#334155;font-weight:700;padding:4px 6px;border:1px solid #e2e8f0;text-align:center;white-space:nowrap}
+.tb td{padding:4px 6px;border:1px solid #e2e8f0;vertical-align:middle}
+.tb.dn th{background:#0f172a;color:#fff;border-color:#0f172a}
+.tb td.l{text-align:left}.tb td.c{text-align:center}.tb td.r{text-align:right}
+.tb tr.me td{background:#f0fdf4;font-weight:700}
+.bd{display:inline-block;padding:0 7px;border-radius:99px;font-size:8.5px;font-weight:800;line-height:15px;white-space:nowrap}
+.bd.g{background:#dcfce7;color:#166534}.bd.r{background:#fee2e2;color:#b91c1c}.bd.y{background:#fef3c7;color:#92400e}.bd.b{background:#dbeafe;color:#1d4ed8}.bd.s{background:#e2e8f0;color:#334155}.bd.p{background:#ede9fe;color:#6d28d9}
+.bar{height:7px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;border-radius:4px}
+.note{background:#f8fafc;border-left:3px solid #16a34a;padding:6px 9px;font-size:9.5px;color:#334155;border-radius:0 6px 6px 0}
+.note.am{border-left-color:#f59e0b;background:#fffbeb}.note.rd{border-left-color:#dc2626;background:#fef2f2}
+.kpi{border:1px solid #e2e8f0;border-radius:8px;padding:8px 10px;background:#fff}
+.kpi .k{font-size:9px;color:#64748b;font-weight:600}
+.kpi .v{font-size:19px;font-weight:800;line-height:1.2;letter-spacing:-.02em}
+.kpi .s{font-size:8.5px;color:#64748b}
+ul.ls{list-style:none;display:flex;flex-direction:column;gap:3px}
+ul.ls li{position:relative;padding-left:11px;font-size:9.8px;color:#334155}
+ul.ls li:before{content:'';position:absolute;left:1px;top:6px;width:5px;height:5px;border-radius:50%;background:#16a34a}
+.ls.rd li:before{background:#dc2626}.ls.bl li:before{background:#2563eb}
+.small{font-size:8.8px;color:#64748b}
+.gauge{position:relative;overflow:hidden;margin:0 auto}
+.gauge-arc{position:absolute;left:0;top:0;border-radius:50%}
+.gauge-hole{position:absolute;border-radius:50%}
+.gauge-val{position:absolute;left:0;right:0;bottom:0;text-align:center;line-height:1}
+.gauge-val span{font-size:9px;color:#94a3b8;margin-left:2px;font-weight:700}
+.cv-top{background:linear-gradient(135deg,#0b1220 0%,#0f2a1d 100%);color:#fff;border-radius:12px;padding:22px 26px;position:relative;overflow:hidden}
+.cv-top:after{content:'';position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(34,197,94,.35),transparent 70%)}
+.cv-tag{font-size:9.5px;letter-spacing:.22em;color:#86efac;font-weight:800;margin-top:22px}
+.cv-title{font-size:34px;font-weight:900;line-height:1.18;letter-spacing:-.03em;margin-top:6px}
+.cv-name{font-size:21px;font-weight:800;margin-top:16px;color:#fff}
+.cv-addr{font-size:11px;color:#cbd5e1;margin-top:3px}
+.cv-score{display:flex;align-items:center;gap:20px;margin-top:20px;position:relative;z-index:2}
+.cv-circ{width:128px;height:128px;border-radius:50%;border:9px solid #f59e0b;display:flex;flex-direction:column;align-items:center;justify-content:center;background:rgba(255,255,255,.06)}
+.cv-circ b{font-size:50px;line-height:1;font-weight:900}.cv-circ span{font-size:10px;color:#cbd5e1;margin-top:2px}
+.cv-grade{width:62px;height:62px;border-radius:14px;background:#f59e0b;color:#0f172a;font-size:38px;font-weight:900;display:flex;align-items:center;justify-content:center}
+.logo{display:flex;align-items:center;gap:7px;font-weight:900;letter-spacing:-.02em}
+.logo .tx{font-size:15px}.logo .en{font-size:8px;letter-spacing:.25em;opacity:.7;display:block;font-weight:700}
+.mk{width:208px;height:458px;border:5px solid #0f172a;border-radius:24px;overflow:hidden;background:#f1f5f9;position:relative;flex:none;font-size:8.5px}
+.mk-st{height:14px;background:#fff;display:flex;justify-content:space-between;padding:2px 10px;font-size:7px;color:#475569}
+.mk-bar{background:#fff;padding:5px 7px 6px;display:flex;align-items:center;gap:5px;border-bottom:1px solid #e2e8f0}
+.mk-n{background:#03c75a;color:#fff;font-weight:900;width:15px;height:15px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:9px;flex:none}
+.mk-q{flex:1;border:1.5px solid #03c75a;border-radius:12px;padding:2px 7px;font-size:8.5px;font-weight:700;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;background:#fff}
+.mk-tabs{display:flex;gap:9px;background:#fff;padding:4px 8px;font-size:8px;color:#64748b;border-bottom:1px solid #e2e8f0}
+.mk-tabs .on{color:#03c75a;font-weight:800;border-bottom:2px solid #03c75a;padding-bottom:1px}
+.mk-sec{background:#fff;margin-top:5px;padding:6px 7px}
+.mk-h{font-weight:800;font-size:9px;margin-bottom:4px;display:flex;align-items:center;gap:4px}
+.mk-h em{font-style:normal;font-size:6.5px;background:#e2e8f0;color:#475569;border-radius:3px;padding:0 3px;font-weight:700}
+.mk-ad{padding:3px 0;border-top:1px dashed #e2e8f0}
+.mk-ad b{display:block;font-size:8.5px;color:#1d4ed8}
+.mk-ad small{font-size:7px;color:#64748b}
+.mk-row{display:flex;gap:5px;align-items:center;padding:4px 0;border-top:1px solid #f1f5f9;position:relative}
+.mk-row .rn{width:14px;font-weight:900;color:#0f172a;text-align:center;flex:none;font-size:9px}
+.mk-row .th{width:30px;height:30px;border-radius:5px;background:linear-gradient(135deg,#cbd5e1,#e2e8f0);flex:none}
+.mk-row strong{display:block;font-size:8.3px;line-height:1.25}
+.mk-row small{font-size:6.8px;color:#64748b}
+.mk-row.me{background:#f0fdf4;outline:1.5px solid #16a34a;border-radius:4px;padding:4px 3px}
+.mk-more{text-align:center;color:#94a3b8;font-size:9px;line-height:1;padding:2px 0}
+.pin{position:absolute;right:2px;top:2px;width:13px;height:13px;border-radius:50%;background:#dc2626;color:#fff;font-size:7.5px;font-weight:800;display:flex;align-items:center;justify-content:center;font-style:normal;z-index:3}
+.mk-hero{height:92px;background:linear-gradient(135deg,#94a3b8,#cbd5e1);position:relative}
+.mk-hero .cnt{position:absolute;right:5px;bottom:5px;background:rgba(15,23,42,.75);color:#fff;border-radius:8px;padding:0 6px;font-size:7px;line-height:13px}
+.mk-btns{display:flex;justify-content:space-around;background:#fff;padding:5px 3px;border-top:1px solid #e2e8f0;font-size:7px;color:#334155;text-align:center}
+.mk-btns i{display:block;font-size:10px;color:#03c75a;margin-bottom:1px}
+.mk-tab2{display:flex;gap:6px;background:#fff;padding:3px 7px;font-size:7.3px;color:#64748b;border-top:1px solid #e2e8f0;border-bottom:1px solid #e2e8f0;white-space:nowrap;overflow:hidden}
+.mk-tab2 .on{color:#03c75a;font-weight:800}
+.mx{display:grid;grid-template-columns:1fr 1fr;grid-auto-rows:minmax(88px,auto);gap:4px}
+.mx>div{border-radius:6px;padding:5px 7px;font-size:8.8px;position:relative}
+.mx .qh{font-size:9px;font-weight:800;margin-bottom:3px}
+.mxb{display:inline-flex;width:15px;height:15px;border-radius:50%;background:#0f172a;color:#fff;font-size:8.5px;font-weight:800;align-items:center;justify-content:center;margin:1px 2px 0 0}
+.rm{border:1px solid #e2e8f0;border-radius:8px;overflow:hidden}
+.rm .hd{padding:6px 9px;color:#fff;font-weight:800;font-size:10.5px}
+.rm .bd2{padding:7px 9px}
+.rtb{position:fixed;left:0;right:0;top:0;z-index:99;background:#0f172a;color:#e2e8f0;display:flex;justify-content:space-between;align-items:center;padding:9px 18px;font-size:12px;border-bottom:1px solid #334155}
+.rtb button{background:#10b981;color:#fff;border:0;border-radius:8px;padding:7px 14px;font-weight:800;font-size:12px;cursor:pointer;font-family:inherit}
+.rtb .hint{color:#94a3b8;margin-right:12px}
+@media screen{body{background:#334155;padding:64px 0 28px}.page{margin:0 auto 22px;box-shadow:0 10px 40px rgba(0,0,0,.45)}}
+@media print{.noprint{display:none!important}body{padding:0;background:#fff}.page{margin:0;box-shadow:none}}
+`;
+
+/* ---- 렌더 헬퍼 ---- */
+const H = {
+  badge: (t, c) => '<span class="bd ' + (c || 's') + '">' + t + '</span>',
+  bar: (p, c) => '<div class="bar"><i style="width:' + clamp(p, 0, 100) + '%;background:' + (c || '#16a34a') + '"></i></div>',
+  title: (no, t, sub) => '<div class="pt"><div class="pt-l"><span class="pt-no">' + no + '</span><h2>' + t + '</h2></div>' + (sub ? '<span class="pt-sub">' + sub + '</span>' : '') + '</div>',
+  st: t => '<h3 class="st">' + t + '</h3>',
+  note: (t, c) => '<div class="note ' + (c || '') + '">' + t + '</div>',
+  table: (heads, rows, aligns, cls, meIdx) => {
+    const al = aligns || '';
+    const map = { l: 'l', c: 'c', r: 'r' };
+    return '<table class="tb ' + (cls || '') + '"><thead><tr>' + heads.map(h => '<th>' + h + '</th>').join('') + '</tr></thead><tbody>' +
+      rows.map((r, ri) => '<tr' + (meIdx === ri ? ' class="me"' : '') + '>' + r.map((c, i) => '<td class="' + (map[al[i]] || 'l') + '">' + c + '</td>').join('') + '</tr>').join('') + '</tbody></table>';
+  },
+  kpi: (k, v, s, color) => '<div class="kpi"><div class="k">' + k + '</div><div class="v"' + (color ? ' style="color:' + color + '"' : '') + '>' + v + '</div>' + (s ? '<div class="s">' + s + '</div>' : '') + '</div>',
+  st3: s => ({ '양호': 'g', '보완': 'y', '미흡': 'r' }[s] || 's'),
+  cmpBar: (my, bench, color) => '<div class="bar ov"><i style="width:' + clamp(my, 0, 100) + '%;background:' + color + '"></i><b style="left:' + clamp(bench, 0, 99) + '%"></b></div>',
+  chCmp: (M, title) => '<div class="card"><div class="st" style="margin-bottom:5px">' + title + ' <span class="small" style="font-weight:500">(막대 = 내 점수 · 검정 선 = 상위권 평균 추정)</span></div>' +
+    M.score.channels.map(c => '<div style="display:flex;align-items:center;gap:7px;margin:5px 0"><span style="width:118px;font-size:9.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + c.label + '</span><div style="flex:1">' + H.cmpBar(c.s, M.bench[c.key], c.s >= 60 ? '#16a34a' : c.s >= 45 ? '#f59e0b' : '#dc2626') + '</div><b style="width:62px;text-align:right;font-size:9.5px">' + c.s + ' <span style="color:#94a3b8;font-weight:600">/ ' + M.bench[c.key] + '</span></b></div>').join('') + '</div>'
+};
+
+function logoSvg(size, light) {
+  const a = light ? '#4ade80' : '#16a34a', b = light ? '#22c55e' : '#15803d', c = light ? '#86efac' : '#22c55e';
+  return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg"><circle cx="14" cy="14" r="8.5" fill="' + a + '"/><circle cx="26" cy="14" r="8.5" fill="' + b + '"/><circle cx="14" cy="26" r="8.5" fill="' + b + '"/><circle cx="26" cy="26" r="8.5" fill="' + a + '"/><circle cx="20" cy="20" r="4" fill="' + c + '"/><path d="M24 30 Q30 36 35 38" stroke="' + b + '" stroke-width="2.4" fill="none" stroke-linecap="round"/></svg>';
+}
+function logoHtml(M, light) {
+  return '<div class="logo" style="color:' + (light ? '#fff' : '#14532d') + '">' + logoSvg(30, light) + '<div><span class="tx">' + M.issuer + '</span><span class="en">ONLINE MARKETING LAB</span></div></div>';
+}
+function gauge(score, size, bg, color, track, txt) {
+  const w = size, h = Math.round(size / 2) + 4, hole = Math.round(size * 0.22), a = (score / 100 * 180).toFixed(1);
+  return '<div class="gauge" style="width:' + w + 'px;height:' + h + 'px"><div class="gauge-arc" style="width:' + w + 'px;height:' + w + 'px;background:conic-gradient(from 270deg,' + color + ' 0deg,' + color + ' ' + a + 'deg,' + track + ' ' + a + 'deg,' + track + ' 180deg,transparent 180deg)"></div><div class="gauge-hole" style="left:' + hole + 'px;top:' + hole + 'px;width:' + (w - 2 * hole) + 'px;height:' + (w - 2 * hole) + 'px;background:' + bg + '"></div><div class="gauge-val" style="color:' + txt + '"><b style="font-size:' + Math.round(size * 0.27) + 'px;font-weight:900">' + score + '</b><span>/100</span></div></div>';
+}
+
+function pageWrap(M, n, body) {
+  return '<section class="page" data-page="' + n + '"><header class="ph"><div><b>' + M.name + '</b> · 온라인 마케팅 종합 진단서</div><div class="brand">' + logoSvg(14, false) + M.issuer + ' · ' + M.docId + '</div></header><main class="pb"><div class="zw">' + body + '</div></main><footer class="pf"><span><i class="fa-solid fa-lock" style="margin-right:4px"></i>본 문서는 ' + M.name + ' 전용 <b>대외비</b> 자료이며 무단 복제·배포를 금지합니다. · 진단 기준일 ' + M.issuedStr + '</span><span class="pn">' + n + '/' + TOTAL_PAGES + '</span></footer></section>';
+}
+
+/* ---- P.1 표지 ---- */
+function p1(M) {
+  const s = M.score, a = M.kwAgg, d = M.demo;
+  return '<div class="cv-top">' +
+    '<div style="position:relative;z-index:2">' + logoHtml(M, true) +
+    '<div class="cv-tag">ONLINE MARKETING DIAGNOSIS REPORT</div>' +
+    '<h1 class="cv-title">온라인 마케팅<br>종합 진단서</h1>' +
+    '<div class="cv-name">' + M.name + '</div>' +
+    '<div class="cv-addr"><i class="fa-solid fa-location-dot" style="margin-right:5px;color:#86efac"></i>' + M.address + '</div>' +
+    '<div style="margin-top:8px;display:inline-block;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:99px;padding:2px 11px;font-size:10px;color:#e2e8f0"><i class="fa-solid ' + M.cfg.icon + '" style="margin-right:5px;color:#86efac"></i>' + M.industryFull + '</div>' +
+    '<div class="cv-score"><div class="cv-circ" style="border-color:' + s.col + '"><b>' + s.total + '</b><span>종합 마케팅 점수 / 100</span></div>' +
+    '<div><div style="display:flex;align-items:center;gap:12px"><div class="cv-grade" style="background:' + s.col + ';color:' + s.onCol + '">' + s.grade + '</div><div><div style="font-size:10px;color:#94a3b8;font-weight:700">종합 등급</div><div style="font-size:19px;font-weight:900;color:' + s.colLight + '">' + s.label + '</div></div></div>' +
+    '<div style="margin-top:12px;font-size:10.5px;color:#cbd5e1;line-height:1.65">동일 상권 동종 업소 <b style="color:#fff">' + d.c1000 + '곳</b> 대비 온라인 경쟁력이 ' + (s.grade === 'A' || s.grade === 'B' ? '양호하나' : '낮아') + '<br>핵심 키워드 평균 순위 <b style="color:#fff">' + a.avgRank + '위</b> · 6대 채널 중 <b style="color:#fff">' + M.chWorst.label + '</b> 우선 보완 필요</div></div></div></div></div>' +
+    '<div class="g4">' +
+    H.kpi('분석 키워드 월 검색량 합계', nf(a.totalVol) + '<span style="font-size:10px">회</span>', '네이버 30일 기준 추정') +
+    H.kpi('핵심 키워드 평균 순위', a.avgRank + '<span style="font-size:10px">위</span>', '플레이스 모바일 기준', '#b45309') +
+    H.kpi('반경 1km 추정 인구', nf(d.pop1000) + '<span style="font-size:10px">명</span>', '세대 ' + nf(d.hh1000) + '호') +
+    H.kpi('반경 1km 동종 업소', d.c1000 + '<span style="font-size:10px">곳</span>', '업소당 수요 ' + nf(d.perShop1000) + '명', '#b91c1c') + '</div>' +
+    H.st('진단 개요') +
+    H.table(['구분', '내용', '구분', '내용'], [
+      ['업체명(상호)', '<b>' + M.name + '</b>', '업종 분류', M.industryFull],
+      ['매장 주소', M.address, '분석 상권', M.geo.areaLocal + ' 반경 1km'],
+      ['핵심 분석 키워드', M.kws.map(k => k.kw).join(' · '), '분석 채널', '플레이스 · 리뷰 · 블로그 · ' + M.cfg.homeLabel + ' · 광고 · 정보 일관성'],
+      ['진단 기준일', M.issuedStr + ' (조회 당일 기준)', '문서 식별 번호', '<b>' + M.docId + '</b>'],
+      ['발행 회사', M.issuer, '리포트 구성', 'A4 15페이지 (진단 요약 ~ 90일 로드맵)']
+    ], 'lclc') +
+    H.note('<b>업종 특성 가중치 적용</b> — ' + M.cfg.label + ': ' + M.cfg.focus.join(' · ') + ' 중심으로 채널 배점을 설계했습니다. 준수 법규: ' + M.cfg.law.name) +
+    provNote(M);
+}
+
+/* ---- P.2 진단 요약 ---- */
+function p2(M) {
+  const s = M.score, a = M.kwAgg, d = M.demo;
+  const best = a.best, worst = a.worst;
+  const summary = '<b>' + M.name + '</b>은(는) 입력하신 핵심 키워드 ' + M.kws.length + '개 중 \'<b>' + best.kw + '</b>\'에서 플레이스 <b>' + rk(best.rank) + '</b>로 가장 높은 노출을 보이지만, \'<b>' + worst.kw + '</b>\'은(는) <b>' + rk(worst.rank) + '</b>로 ' + (worst.rank > 28 ? '사실상 노출 기회가 없습니다' : '추가 개선 여지가 있습니다') + '. ' +
+    '분석 키워드 월 검색량 합계 <b>' + nf(a.totalVol) + '회</b> 중 현재 순위로 확보 가능한 유입은 약 <b>' + nf(a.est) + '회(' + a.captureRate + '%)</b> 수준이며, 상위 3위권 진입 시 최대 <b>' + nf(a.potential) + '회</b>까지 확대할 수 있습니다. ' +
+    '반경 1km 내 동종 업소 ' + d.c1000 + '곳 가운데 ' + M.comps[0].name + ' 등 상위 업체가 방문자 리뷰 ' + nf(M.comps[0].reviews) + '건으로 격차를 벌리고 있어, 종합 <b>' + s.total + '점(' + s.grade + '등급)</b> — <b style="color:' + s.colDark + '">' + s.label + '</b>(으)로 진단됩니다.';
+  const cards = s.channels.map(c => {
+    const col = c.s >= 60 ? '#16a34a' : c.s >= 45 ? '#f59e0b' : '#dc2626';
+    return '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center"><b style="font-size:10.5px"><i class="fa-solid ' + c.icon + '" style="color:#16a34a;margin-right:5px"></i>' + c.label + '</b>' + H.badge('가중치 ' + c.w, 's') + '</div>' +
+      '<div style="display:flex;align-items:baseline;gap:4px;margin:5px 0 4px"><span style="font-size:22px;font-weight:900;color:' + col + '">' + c.s + '</span><span class="small">/100 · 배점 ' + c.pts + '점</span></div>' + H.bar(c.s, col) +
+      '<div class="small" style="margin-top:4px">' + chComment(M, c) + '</div></div>';
+  }).join('');
+  return H.title('02', '진단 요약', 'Executive Summary') +
+    '<div class="row"><div class="card sl" style="width:236px;text-align:center;padding-top:12px">' + gauge(s.total, 200, '#f8fafc', s.col, '#e2e8f0', '#0f172a') +
+    '<div style="display:flex;justify-content:center;gap:8px;align-items:center;margin-top:6px"><span style="background:' + s.col + ';color:' + s.onCol + ';font-weight:900;font-size:14px;border-radius:6px;padding:0 9px">' + s.grade + '</span><b style="color:' + s.colDark + ';font-size:12px">' + s.label + '</b></div>' +
+    '<div class="small" style="margin-top:5px">등급 기준 A 85↑ · B 70↑ · C 40↑ · D 40↓</div></div>' +
+    '<div class="card" style="flex:1"><div class="st" style="margin-bottom:5px">맞춤 진단 요약</div><div style="font-size:10.5px;line-height:1.7;color:#1e293b">' + summary + '</div></div></div>' +
+    H.st('6대 채널 배점 카드 <span class="small" style="font-weight:500">(SNS는 활동량 확인 불가로 제외 후 가중치 재정규화)</span>') +
+    '<div class="g3">' + cards + '</div>' +
+    '<div class="g3">' +
+    '<div class="card gr"><div class="st" style="margin-bottom:4px;color:#166534">강점 · Strength</div><ul class="ls">' + M.swo.s.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' +
+    '<div class="card rd"><div class="st" style="margin-bottom:4px;color:#b91c1c">보완점 · Weakness</div><ul class="ls rd">' + M.swo.w.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' +
+    '<div class="card bl"><div class="st" style="margin-bottom:4px;color:#1d4ed8">기회 · Opportunity</div><ul class="ls bl">' + M.swo.o.map(x => '<li>' + x + '</li>').join('') + '</ul></div></div>' +
+    H.chCmp(M, '채널별 점수 vs 상위권 평균');
+}
+function dataStatus(M) {
+  const L = M.live || {}, st = L.status || {}, man = M.man || {};
+  const stat = (key, okTxt) => !st[key] ? ['est', '미연동'] : st[key].ok ? ['live', okTxt] : ['fail', st[key].unconfigured ? 'API 키 미설정' : '조회 실패 · ' + esc(st[key].msg || '')];
+  const kwLive = M.kws.filter(k => k.volLive).length, kwMan = M.kws.filter(k => k.rankManual).length;
+  const manFields = [['reviews', '리뷰'], ['photos', '사진'], ['news', '소식'], ['reply', '답글'], ['rating', '별점']].filter(f => man[f[0]] !== undefined && man[f[0]] !== null && man[f[0]] !== '').map(f => f[1]);
+  const kwSt = stat('keywords', kwLive + '/' + M.kws.length + '개 키워드 실측');
+  if (kwSt[0] === 'live' && kwLive === 0) kwSt[0] = 'est', kwSt[1] = '키워드도구에 없는 키워드(추정)';
+  const rows = [
+    ['주소·행정동 (카카오 로컬)'].concat(stat('geocode', '행정동 ' + esc(M.geo.dong || '-') + ' 확인')),
+    ['행정동 인구·세대 (행안부)'].concat(stat('population', M.demo.popYm + ' 기준 실측')),
+    ['반경 동종 업소 수 (카카오 로컬)'].concat(stat('places', '500m/1km/2km 집계' + (M.compLiveN ? ' · 인근 업소 ' + M.compLiveN + '곳' : ''))),
+    ['월 검색량·광고 경쟁 (검색광고)'].concat(kwSt),
+    ['블로그 게시량 (네이버 검색)'].concat(stat('blog', '상호·경쟁업체 게시 수')),
+    ['사업자 상태 (국세청)'].concat(M.bizNo ? stat('nts', '상태조회 완료') : ['est', '사업자번호 미입력']),
+    ['플레이스 키워드 순위'].concat(kwMan ? ['man', kwMan + '/' + M.kws.length + '개 직접 입력 (나머지 추정)'] : ['est', '모델 추정 (공식 API 없음)']),
+    ['플레이스 리뷰·사진·소식·답글'].concat(manFields.length ? ['man', manFields.join('·') + ' 직접 입력 (나머지 추정)'] : ['est', '모델 추정']),
+    ['파워링크·플레이스 광고 집행'].concat(man.ads === 'on' || man.ads === 'off' ? ['man', '직접 입력'] : ['est', '모델 추정']),
+    ['경쟁업체 리뷰·사진·지도 4채널 일치도'].concat(['est', '모델 추정 (공식 API 없음)'])
+  ];
+  return rows;
+}
+const STATE_BADGE = { live: ['실측', 'g'], man: ['직접 입력', 'p'], est: ['추정', 's'], fail: ['실패→추정', 'r'] };
+function provNote(M) {
+  const rows = dataStatus(M);
+  const by = k => rows.filter(r => r[1] === k).map(r => r[0].replace(/ \(.*\)$/, ''));
+  const live = by('live'), man = by('man'), est = by('est').concat(by('fail'));
+  const nt = M.live && M.live.nts;
+  const alert = nt && (nt.statusCode !== '01') ? '<div class="note rd small" style="font-size:9px"><b>사업자 상태 주의</b> — 국세청 조회 결과 ' + (nt.registered ? esc(nt.status) + (nt.endDate ? ' (' + esc(nt.endDate) + ')' : '') : '등록되지 않은 번호') + '입니다. 사업자번호를 재확인하세요.</div>' : '';
+  return alert + '<div class="note am small" style="font-size:9px"><b>데이터 구분</b> — ' + (live.length ? '<b>실측(공식 API)</b>: ' + live.join(', ') + '. ' : '실측 연동 없이 입력값 기반 <b>모델 추정</b>으로 산출했습니다. ') + (man.length ? '<b>직접 입력</b>: ' + man.join(', ') + '. ' : '') + '<b>추정</b>: ' + (est.length ? est.join(', ') : '없음') + '. 구분 상세는 15페이지, 추정 항목은 발행 전 공식 도구로 검증하시기 바랍니다.</div>';
+}
+function chComment(M, c) {
+  const p = M.place, a = M.kwAgg;
+  switch (c.key) {
+    case 'place': return '사진 ' + p.photos + '/' + p.photoTarget + '장 · 소식 ' + p.news + '건 · 체크리스트 ' + M.chkOk + '/6 양호';
+    case 'review': return '리뷰 ' + nf(p.reviews) + '건 (경쟁 평균 ' + nf(M.compAvg.reviews) + '건) · 답글 ' + p.reply + '/10';
+    case 'blog': return '최근 30일 ' + M.blog.blog30 + '건 (경쟁 평균 ' + M.compAvg.blog30 + '건)';
+    case 'home': return M.cfg.homeLabel + ' 구축·연동 수준 ' + (c.s >= 50 ? '보통' : '부족');
+    case 'ads': return M.ads.on ? '일부 키워드 광고 집행 확인 · 구조 최적화 필요' : '파워링크·플레이스 광고 미집행 (경쟁 ' + M.ads.compCount[0] + '곳 집행)';
+    default: return '4대 지도 이슈 ' + M.mapIssues + '건 · 일치율 ' + Math.round(M.consist * 100) + '%';
+  }
+}
+
+/* ---- P.3 사업자 정보 ---- */
+function p3(M) {
+  const cfg = M.cfg, g = M.geo, r = M.rngP || (M.rngP = makeRng(M.seed ^ 0x3a3a));
+  const ok = () => H.badge('일치', 'g'), chk = () => H.badge('확인 필요', 'y'), no = () => H.badge('상이 가능', 'r');
+  const phoneRow = r.chance(0.8) ? ok() : chk();
+  const hoursRow = r.chance(0.6) ? ok() : chk();
+  const siteRow = r.chance(0.5) ? chk() : no();
+  const nt = M.live && M.live.nts;
+  const ntsDate = nt && nt.queriedAt ? nt.queriedAt.slice(0, 10) : M.issuedStr;
+  const hrs = r.chance(0.6) ? '입력' : '미입력';
+  const ntsRows = nt ? [
+    ['사업자 상태', '국세청 조회 결과: <b>' + (nt.registered ? esc(nt.status) : '미등록 번호') + '</b>' + (nt.taxType ? ' · ' + esc(nt.taxType) : '') + ' <span class="small">(' + ntsDate + ' 실측 · ' + esc(nt.bno.slice(0, 3) + '-' + nt.bno.slice(3, 5) + '-*****') + ')</span>', nt.statusCode === '01' ? '운영 중 표기' : '확인 필요', nt.statusCode === '01' ? H.badge('확인됨', 'g') : H.badge(nt.registered ? esc(nt.status) : '조회 불가', 'r')],
+    ['휴·폐업 신고 이력', nt.endDate ? '폐업일 ' + esc(nt.endDate.replace(/^(\d{4})(\d{2})(\d{2})$/, '$1-$2-$3')) + ' (국세청)' : (nt.registered ? '휴·폐업 신고 이력 없음 (국세청 ' + ntsDate + ' 기준)' : esc(nt.message)), '영업 중 (휴무일 정보 ' + hrs + ')', nt.endDate || !nt.registered ? H.badge('상이', 'r') : H.badge('확인됨', 'g')]
+  ] : [
+    ['사업자 상태', '계속사업자 여부 — 국세청 <b>사업자등록 상태조회</b> (' + M.issuedStr + ' 조회)', '운영 중 표기', chk()],
+    ['휴·폐업 신고 이력', '국세청 상태조회 결과 확인 항목', '영업 중 (휴무일 정보 ' + hrs + ')', chk()]
+  ];
+  const rows = [
+    ['상호(대표 표기)', M.name, M.name, ok()],
+    ['업종·업태', cfg.label + (M.detail ? ' · ' + M.detail : ''), M.place.cat, ok()],
+    ['사업장 소재지', M.address + ' <span class="small">(도로명)</span>', M.address, ok()],
+    ntsRows[0],
+    ntsRows[1],
+    ['대표 전화', g.areaCode + '-XXX-XXXX 형식 (홈택스·공개 번호)', g.areaCode + '-XXX-XXXX 표기', phoneRow],
+    ['영업시간', '해당 없음 (공공 자료 미제공)', '요일별 시간 ' + (r.chance(0.6) ? '입력' : '일부 누락'), hoursRow],
+    [cfg.key === 'retail' ? '스마트스토어·홈페이지' : '홈페이지·예약 링크', '사업자 공개 URL 직접 접속 (원본 HTML)', '링크 ' + (r.chance(0.5) ? '미연동' : '연동'), siteRow]
+  ];
+  const wrows = ['place', 'review', 'blog', 'home', 'sns', 'ads', 'info'].map(k => {
+    const raw = cfg.w[k];
+    const lab = { place: '네이버 플레이스', review: cfg.reviewLabel, blog: '블로그 바이럴', home: cfg.homeLabel, sns: 'SNS', ads: '광고 운영', info: '정보 일관성' }[k];
+    const norm = k === 'sns' ? null : M.chMap[k].w;
+    const hot = raw >= 20;
+    return [lab, '<div style="display:flex;align-items:center;gap:6px"><div style="flex:1">' + H.bar(raw * 3, hot ? '#16a34a' : '#94a3b8') + '</div><b>' + raw + '</b></div>', k === 'sns' ? H.badge('제외', 's') : '<b>' + norm + '</b>', hot ? H.badge('집중 가중', 'g') : (k === 'sns' ? '활동량 확인 불가' : '표준')];
+  });
+  return H.title('03', '사업자 정보 · 업종 특성', 'Business Verification') +
+    H.st('공공 자료 ↔ 네이버 플레이스 대조표') +
+    H.table(['항목', '공공 확인 기준 (국세청 등)', '플레이스 표기 (추정)', '대조 결과'], rows, 'lllc') +
+    H.note('<b>확인 방법</b> — 국세청 홈택스 「사업자등록 상태조회」에서 상호·사업자번호로 계속/휴업/폐업 여부를 ' + M.issuedStr + ' 기준 최신 상태로 조회한 뒤 플레이스 표기와 대조하세요. 표의 플레이스 표기 값은 입력 정보 기반 추정이며 "확인 필요" 항목은 실측 확인 대상입니다.') +
+    H.st('업종 특성 가중치 — ' + cfg.label) +
+    '<div class="row"><div class="card gr" style="width:200px;flex:none"><div style="font-size:26px;color:#16a34a"><i class="fa-solid ' + cfg.icon + '"></i></div><div style="font-weight:800;font-size:12px;margin:3px 0">' + cfg.label + '</div><div class="small" style="color:#334155;margin-bottom:5px">가중치 집중 영역</div><ul class="ls">' + cfg.focus.map(f => '<li>' + f + '</li>').join('') + '</ul></div>' +
+    '<div style="flex:1">' + H.table(['채널', '업종 가중치(원점수)', '재산정 가중치', '해석'], wrows, 'lclc') + '</div></div>' +
+    '<div class="card am"><div class="st" style="margin-bottom:3px">준수 법규 · ' + cfg.law.name + '</div><div style="font-size:9.8px;color:#44403c;margin-bottom:4px">' + cfg.law.summary + '</div><ul class="ls">' + cfg.law.rules.map(x => '<li>' + x + '</li>').join('') + '</ul></div>' +
+    '<div class="small">※ 가중치 = 채널별 0~100점 × 업종 가중치. SNS(' + cfg.w.sns + ')는 공개 지표로 활동량을 확인할 수 없어 제외하고 나머지 ' + M.score.sumEx + '를 100으로 재산정했습니다.</div>';
+}
+
+/* ---- P.4 상권 분석 ---- */
+function radiusSvg(M) {
+  const r = makeRng(M.seed ^ 0x5151), d = M.demo;
+  const cx = 150, cy = 150;
+  const types = [['station', '#2563eb', 'rect', d.fac.station], ['school', '#f59e0b', 'tri', d.fac.school], ['apt', '#7c3aed', 'sq', Math.min(d.fac.apt, 14)], ['mart', '#0891b2', 'dia', d.fac.mart], ['office', '#64748b', 'sq', d.fac.office]];
+  let out = '';
+  const pt = (rad) => { const a = r.next() * Math.PI * 2, rr = Math.sqrt(r.range(0.04, 1)) * rad; return [cx + Math.cos(a) * rr, cy + Math.sin(a) * rr]; };
+  const comp = Math.min(d.c1000, 38);
+  for (let i = 0; i < comp; i++) { const [x, y] = pt(138); out += '<circle cx="' + x.toFixed(1) + '" cy="' + y.toFixed(1) + '" r="2.8" fill="#ef4444" opacity=".8"/>'; }
+  types.forEach(t => {
+    for (let i = 0; i < t[3]; i++) {
+      const [x, y] = pt(132);
+      if (t[2] === 'rect') out += '<rect x="' + (x - 5).toFixed(1) + '" y="' + (y - 5).toFixed(1) + '" width="10" height="10" rx="2" fill="' + t[1] + '"/>';
+      else if (t[2] === 'tri') out += '<polygon points="' + x.toFixed(1) + ',' + (y - 6).toFixed(1) + ' ' + (x - 5.5).toFixed(1) + ',' + (y + 4).toFixed(1) + ' ' + (x + 5.5).toFixed(1) + ',' + (y + 4).toFixed(1) + '" fill="' + t[1] + '"/>';
+      else if (t[2] === 'dia') out += '<polygon points="' + x.toFixed(1) + ',' + (y - 6).toFixed(1) + ' ' + (x + 6).toFixed(1) + ',' + y.toFixed(1) + ' ' + x.toFixed(1) + ',' + (y + 6).toFixed(1) + ' ' + (x - 6).toFixed(1) + ',' + y.toFixed(1) + '" fill="' + t[1] + '"/>';
+      else out += '<rect x="' + (x - 3.5).toFixed(1) + '" y="' + (y - 3.5).toFixed(1) + '" width="7" height="7" fill="' + t[1] + '"/>';
+    }
+  });
+  return '<svg viewBox="0 0 300 300" width="272" height="272" xmlns="http://www.w3.org/2000/svg"><circle cx="150" cy="150" r="144" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.6" stroke-dasharray="5 4"/><circle cx="150" cy="150" r="72" fill="#dcfce7" stroke="#16a34a" stroke-width="1.6"/>' +
+    '<line x1="6" y1="150" x2="294" y2="150" stroke="#bbf7d0" stroke-width="1"/><line x1="150" y1="6" x2="150" y2="294" stroke="#bbf7d0" stroke-width="1"/>' + out +
+    '<circle cx="150" cy="150" r="10" fill="#dc2626" stroke="#fff" stroke-width="3"/><circle cx="150" cy="150" r="3.5" fill="#fff"/>' +
+    '<text x="150" y="82" text-anchor="middle" font-size="10" font-weight="800" fill="#166534">500m</text><text x="150" y="20" text-anchor="middle" font-size="10" font-weight="800" fill="#166534">1km</text></svg>';
+}
+function p4(M) {
+  const d = M.demo, f = d.fac;
+  const dRows = d.dongs.map((x, i) => [(i === 0 ? '<b>' + x.name + '</b> ' + H.badge('소재지', 'g') + (x.live ? ' ' + H.badge('실측', 'b') : '') : x.name), x.area.toFixed(2), x.share + '%', nf(x.popTotal), nf(x.hhTotal), '<b>' + nf(x.popIn) + '</b>']);
+  dRows.push(['<b>반경 1km 합계</b>', d.dongs.reduce((a, x) => a + x.inside, 0).toFixed(2) + ' (원 면적)', '-', '-', '-', '<b>' + nf(d.pop1000) + '</b>']);
+  const fRows = [
+    ['지하철·전철역', f.station + '곳', f.station ? '유동 수요 유입' : '도보 접근 약함'], ['초·중·고교', f.school + '곳', '학부모·가족 수요'], ['아파트 단지', f.apt + '곳', '배후 거주 수요'], ['대형마트·백화점', f.mart + '곳', '상권 집객 시설'], ['관공서·업무시설', f.office + '곳', '직장인 수요'], ['동종 업소 (' + M.cfg.ind + ')', d.c1000 + '곳', '반경 500m ' + d.c500 + '곳']
+  ];
+  return H.title('04', '상권 분석', M.geo.areaLocal + ' 중심 반경 1km') +
+    '<div class="row"><div class="card sl" style="flex:none;width:292px;text-align:center;padding:8px">' + radiusSvg(M) +
+    '<div class="small" style="display:flex;flex-wrap:wrap;gap:3px 9px;justify-content:center;margin-top:3px"><span><b style="color:#dc2626">●</b> 내 매장</span><span><b style="color:#ef4444">●</b> 동종 업소</span><span><b style="color:#2563eb">■</b> 역</span><span><b style="color:#f59e0b">▲</b> 학교</span><span><b style="color:#7c3aed">■</b> 아파트</span><span><b style="color:#0891b2">◆</b> 마트</span></div></div>' +
+    '<div style="flex:1;display:flex;flex-direction:column;gap:7px">' + H.st('시설 현황 (반경 1km)') + H.table(['시설', '수량', '상권 영향'], fRows, 'lcl') +
+    '<div class="note" style="font-size:9px">시설 배치는 주소 기반 개략 도식이며 정확한 위치는 카카오 로컬 API 장소 검색으로 확정합니다.</div></div></div>' +
+    H.st('상권 인구·세대수 4대 카드') +
+    '<div class="g4">' + H.kpi('반경 500m 추정 인구', nf(d.pop500) + '<span style="font-size:10px">명</span>', '인구밀도 약 ' + nf(d.density) + '명/㎢') + H.kpi('반경 500m 세대수', nf(d.hh500) + '<span style="font-size:10px">호</span>', '세대당 ' + d.hhSize.toFixed(1) + '명') +
+    H.kpi('반경 1km 추정 인구', nf(d.pop1000) + '<span style="font-size:10px">명</span>', d.popLive ? '행정동 실측 인구 기반 면적 비례' : '250m 격자 근사', '#166534') + H.kpi('반경 1km 세대수', nf(d.hh1000) + '<span style="font-size:10px">호</span>', '동종 업소 ' + d.c1000 + '곳', '#166534') + '</div>' +
+    H.st('행정동별 면적 · 추정 인구') +
+    H.table(['행정동', '동 면적(㎢)', '반경 내 비중', '동 추정 인구', '동 세대수', '반경 내 추정 인구'], dRows, 'lrrrrr') +
+    '<div class="small">' + (M.geo.live ? '※ 카카오 로컬 API로 확인한 행정동 "' + (M.geo.dong || '미확인') + '" 기준' + (d.popLive ? ' · 행정동 인구·세대는 행정안전부 주민등록 통계(' + esc(d.popYm) + ') 실측값이며, 인접 행정동과 반경 내 인구는 이를 기준으로 면적 비례 추정한 값입니다.' : '. 인구는 모델 추정값입니다.') : '※ 주소지 파싱 결과 행정동 "' + (M.geo.dong || '미확인 (주소에 행정동명 없음)') + '" 기준. 인접 행정동 명칭은 카카오 로컬 API 지역 조회로 확정 후 대체하세요.') + '</div>' +
+    '<div class="g3"><div class="card gr"><div class="st" style="margin-bottom:3px;color:#166534">입지 강점</div><div style="font-size:9.6px;line-height:1.6">반경 500m 내 ' + nf(d.hh500) + '세대 · 아파트 ' + f.apt + '개 단지로 <b>도보 수요</b>가 확보된 생활권입니다.</div></div>' +
+    '<div class="card am"><div class="st" style="margin-bottom:3px;color:#92400e">입지 리스크</div><div style="font-size:9.6px;line-height:1.6">동종 업소 ' + d.c1000 + '곳이 분산되어 있어 업소당 수요는 <b>' + nf(d.perShop1000) + '명</b>, 경쟁 강도 <b>' + d.int1000[0] + '</b> 수준입니다.</div></div>' +
+    '<div class="card bl"><div class="st" style="margin-bottom:3px;color:#1d4ed8">접근성</div><div style="font-size:9.6px;line-height:1.6">' + (f.station ? '역 ' + f.station + '곳이 반경 내에 있어 <b>' + (M.geo.station ? M.geo.station + '역' : '역세권') + '</b> 키워드 활용이 유효합니다.' : '반경 내 역이 없어 <b>차량·배달·주차</b> 안내 정보의 정확성이 중요합니다.') + '</div></div></div>';
+}
+
+/* ---- P.5 상권 해석 ---- */
+function peakChart(M) {
+  const base = { food: [8, 28, 10, 34, 20], medical: [30, 18, 34, 10, 8], fitness: [14, 12, 18, 38, 18], beauty: [10, 16, 24, 22, 28], edu: [6, 10, 36, 38, 10], legal: [28, 22, 30, 10, 10], interior: [10, 20, 28, 12, 30], space: [6, 12, 24, 28, 30], service: [18, 24, 24, 18, 16], retail: [10, 22, 26, 24, 18] }[M.cfg.key];
+  const r = makeRng(M.seed ^ 0x4242);
+  const v = base.map(x => Math.max(3, x + r.int(-3, 3)));
+  const sum = v.reduce((a, b) => a + b, 0);
+  const pct = v.map(x => Math.round(x / sum * 100));
+  const labels = ['평일 오전', '평일 점심', '평일 오후', '평일 저녁', '주말'];
+  const mx = Math.max.apply(null, pct), peak = labels[pct.indexOf(mx)];
+  return '<div class="card"><div style="display:flex;align-items:flex-end;gap:10px;height:78px">' + pct.map((p, i) => '<div style="flex:1;text-align:center"><div style="font-size:9px;font-weight:800;color:' + (p === mx ? '#166534' : '#475569') + '">' + p + '%</div><div style="height:' + Math.round(p / mx * 50) + 'px;background:' + (p === mx ? '#16a34a' : '#bbf7d0') + ';border-radius:4px 4px 0 0;margin-top:2px"></div><div class="small" style="margin-top:2px">' + labels[i] + '</div></div>').join('') + '</div>' +
+    '<div class="small" style="margin-top:6px;color:#334155">피크 시간대는 <b>' + peak + '</b>입니다. 플레이스 영업시간·예약 슬롯·소식 발행 시점을 피크 직전에 맞추면 노출 반응이 높아집니다.</div></div>';
+}
+function p5(M) {
+  const d = M.demo, a = M.kwAgg, g = M.geo;
+  const comp = [
+    ['반경 500m', nf(d.pop500) + '명', nf(d.hh500) + '호', d.c500 + '곳', nf(d.perShop500) + '명', H.badge(d.int500[0], d.int500[1])],
+    ['반경 1km', nf(d.pop1000) + '명', nf(d.hh1000) + '호', d.c1000 + '곳', nf(d.perShop1000) + '명', H.badge(d.int1000[0], d.int1000[1])],
+    ['반경 2km', nf(d.pop2000) + '명', nf(d.hh2000) + '호', d.c2000 + '곳', nf(d.perShop2000) + '명', H.badge(d.int2000[0], d.int2000[1])]
+  ];
+  const wide = [
+    { kw: g.areaCity + ' ' + g.core, mul: 1.0 }, { kw: g.areaCity + ' ' + g.core + ' ' + M.cfg.kwSuffix[0], mul: 1.35 }, { kw: (g.provShort && g.provShort !== g.areaCity ? g.provShort + ' ' : g.areaCity + ' 인근 ') + g.core, mul: 1.9 }
+  ];
+  const baseVol = a.topVol[0].vol;
+  const rr = makeRng(M.seed ^ 0x7777);
+  const wRows = wide.map((w, i) => { const vol = roundTo(baseVol * w.mul * rr.range(0.85, 1.2), 10); return [w.kw, nf(vol) + '회', H.bar(clamp(45 + i * 18 + rr.int(0, 10), 0, 100), i === 2 ? '#dc2626' : '#f59e0b'), i === 0 ? H.badge('1순위', 'g') : i === 1 ? H.badge('2순위', 'b') : H.badge('장기', 's')]; });
+  const bars = [['주거 수요', d.resShare, '#16a34a'], ['직장·업무 수요', d.workShare, '#2563eb'], ['유동·방문 수요', d.floatShare, '#f59e0b']].map(x => '<div style="display:flex;align-items:center;gap:7px;margin:3px 0"><span style="width:76px;font-size:9.5px">' + x[0] + '</span><div style="flex:1">' + H.bar(x[1], x[2]) + '</div><b style="width:30px;text-align:right">' + x[1] + '%</b></div>').join('');
+  return H.title('05', '상권 해석', 'Trade Area Interpretation') +
+    H.st('배후 주거 수요 분석') +
+    '<div class="row"><div class="card" style="flex:1"><div class="small" style="margin-bottom:3px">수요 구성 추정 (반경 1km)</div>' + bars +
+    '<div style="margin-top:6px;font-size:9.8px;line-height:1.65;color:#1e293b">' + (g.dong || g.areaLocal) + ' 일대는 반경 1km 내 아파트·주거 단지 ' + d.fac.apt + '곳이 분포해 <b>주거 기반 수요가 ' + d.resShare + '%</b>를 차지합니다. 1인 가구 비중 약 ' + d.singleShare + '%, 20~30대 비중 약 ' + d.age2030 + '%로 추정되어 ' + (M.cfg.key === 'food' || M.cfg.key === 'beauty' || M.cfg.key === 'fitness' ? '저녁·주말 방문과 배달/예약 수요 대응이 핵심입니다.' : '정보 탐색 후 예약·상담으로 이어지는 검색 기반 유입 설계가 핵심입니다.') + '</div></div>' +
+    '<div class="card gr" style="width:176px;flex:none;text-align:center"><div class="small">상권 수요 지수</div><div style="font-size:42px;font-weight:900;color:#166534;line-height:1.1">' + d.demandIdx + '</div><div class="small" style="margin-bottom:6px">/100 · ' + (d.demandIdx >= 70 ? '수요 풍부' : d.demandIdx >= 55 ? '수요 보통' : '수요 제한적') + '</div>' + H.bar(d.demandIdx, '#16a34a') + '<div class="small" style="margin-top:6px;text-align:left">업소당 수요 ' + nf(d.perShop1000) + '명<br>(업종 적정선 ' + nf(Math.round(1000 / M.cfg.compPer1k)) + '명)</div></div></div>' +
+    H.st('반경별 경쟁도') + H.table(['반경', '추정 인구', '세대수', '동종 업소', '업소당 인구', '경쟁 강도'], comp, 'lrrrrc') +
+    '<div class="note">경쟁 강도는 업소당 인구를 업종 적정선(' + nf(Math.round(1000 / M.cfg.compPer1k)) + '명/업소)과 비교해 산정했습니다. 반경 1km 경쟁 강도는 <b>' + d.int1000[0] + '</b>이며, 인지도 낮은 업소는 상위 3~5개 업체에 수요가 집중되는 구조입니다.' + (M.compLive ? ' <span class="small">(동종 업소 수는 카카오 로컬 \'' + M.geo.core + '\' 검색 반경 집계 실측값이며 자기 업소가 포함될 수 있습니다.)</span>' : '') + '</div>' +
+    H.st('시간대별 수요 분포 (업종 특성 추정)') + peakChart(M) +
+    H.st('광역 키워드 확장성 리포트') + H.table(['확장 키워드', '월 검색량(추정)', '경쟁 난이도', '확장 우선순위'], wRows, 'lrcc') +
+    '<div class="card sl"><div style="font-size:9.8px;line-height:1.65;color:#1e293b"><b>해석</b> — 현재 입력 키워드는 \'' + (g.dong || g.areaLocal) + '\' 인근 생활권 중심입니다. 로컬 키워드(' + a.kws0 + ')에서 3위권을 확보한 뒤 \'' + wide[0].kw + '\' 등 시·구 단위 광역 키워드로 확장하면 검색량 규모가 ' + (wide[2].mul).toFixed(1) + '배까지 커지지만 경쟁도 함께 상승하므로 <b>단계적 확장</b>을 권장합니다.</div></div>';
+}
+
+/* ---- P.6 검색 노출 분석 ---- */
+function p6(M) {
+  const a = M.kwAgg;
+  const catC = { '지키기': 'g', '올리기': 'y', '발굴': 'b' };
+  const rows = M.kws.map(k => [
+    '<b>' + k.kw + '</b>' + (k.supp ? ' ' + H.badge('보충', 's') : ''), nf(k.vol) + '<div class="small">모바일 ' + k.mobPct + '% · ' + (k.volLive ? '실측' : '추정') + '</div>', '<b style="color:' + (k.rank <= 7 ? '#166534' : k.rank <= 28 ? '#b45309' : '#b91c1c') + '">' + rk(k.rank) + '</b>' + (k.rankManual ? '<div class="small">직접 확인</div>' : ''),
+    M.comps[k.top].name, nf(k.est) + '회', H.badge(k.cat, catC[k.cat])
+  ]);
+  const maxV = Math.max.apply(null, M.kws.map(k => k.vol));
+  const bars = M.kws.map(k => '<div style="display:flex;align-items:center;gap:6px;margin:2px 0"><span style="width:112px;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">' + k.kw + '</span><div style="flex:1">' + H.bar(k.vol / maxV * 100, k.cat === '지키기' ? '#16a34a' : k.cat === '올리기' ? '#f59e0b' : '#3b82f6') + '</div><b style="width:52px;text-align:right;font-size:9px">' + nf(k.vol) + '</b></div>').join('');
+  const grp = (cat, color, cls, icon, desc) => {
+    const list = M.kws.filter(k => k.cat === cat);
+    return '<div class="card ' + cls + '"><div class="st" style="color:' + color + ';margin-bottom:2px"><i class="fa-solid ' + icon + '"></i>' + cat + ' (' + list.length + ')</div><div class="small" style="margin-bottom:4px;color:#475569">' + desc + '</div><ul class="ls">' +
+      list.map(k => '<li><b>' + k.kw + '</b> <span class="small">' + rk(k.rank) + ' · ' + nf(k.vol) + '회</span></li>').join('') + '</ul></div>';
+  };
+  const upKw = M.road.up[0], fKw = M.road.find[0], kKw = M.road.keep[0];
+  return H.title('06', '검색 노출 분석', '입력 키워드 ' + M.kws.length + '개 · 플레이스 순위') +
+    H.table(['분석 키워드', '월 검색량', '내 순위', '1위 경쟁점', '추정 월 유입', '전략 분류'], rows, 'lrcl' + 'rc') +
+    '<div class="g4">' + H.kpi('월 검색량 합계', nf(a.totalVol), '분석 키워드 ' + M.kws.length + '개') + H.kpi('평균 순위', a.avgRank + '위', '모바일 플레이스', '#b45309') + H.kpi('추정 월 유입', nf(a.est), '현재 순위 기준') + H.kpi('3위권 진입 시 유입', nf(a.potential), '+' + nf(a.potential - a.est) + '회 기회', '#166534') + '</div>' +
+    H.st('월 검색량 비교') + '<div class="card">' + bars + '</div>' +
+    H.st('타깃 키워드 3분류 전략') +
+    '<div class="g3">' + grp('지키기', '#166534', 'gr', 'fa-shield-halved', '7위 이내 유지·방어 (리뷰·소식 활동 유지)') + grp('올리기', '#92400e', 'am', 'fa-arrow-trend-up', '9~28위 → 3위권 상향 집중 개선') + grp('발굴', '#1d4ed8', 'bl', 'fa-magnifying-glass-plus', '30위 밖 · 신규 노출 기반 구축') + '</div>' +
+    H.note('<b>전략 요약</b> — \'' + (kKw ? kKw.kw : M.kws[0].kw) + '\' 방어를 유지하면서 \'' + (upKw ? upKw.kw : M.kws[1].kw) + '\'(' + (upKw ? rk(upKw.rank) : '') + ')를 3위권으로 끌어올리고, \'' + (fKw ? fKw.kw : M.kws[2].kw) + '\'은(는) 블로그·소식 콘텐츠로 신규 노출을 발굴하는 3단계 접근을 권장합니다. ' + (a.suppCount ? '"보충" 표시 키워드 ' + a.suppCount + '개는 입력 키워드가 6개 미만이어서 상권·업종 기반으로 자동 추가되었습니다.' : '') + '<br><span class="small">' + (M.kws.some(k => k.volLive) ? '월 검색량은 네이버 검색광고 키워드도구(최근 30일) 실측값 ' + M.kws.filter(k => k.volLive).length + '건, 나머지는 추정값입니다.' : '월 검색량은 네이버 검색광고 키워드도구(최근 30일) 조회 구조에 맞춘 추정값입니다.') + (M.kws.some(k => k.rankManual) ? ' 순위는 직접 확인값 ' + M.kws.filter(k => k.rankManual).length + '건 외 추정입니다.' : ' 순위는 모델 추정이며 모바일 플레이스에서 직접 확인이 필요합니다.') + '</span>');
+}
+
+/* ---- P.7 실제 검색 화면 ---- */
+function mockSearch(M, k, adIdx) {
+  const cfg = M.cfg, c = M.comps;
+  const ads = [0, 1].map(i => {
+    const comp = c[(adIdx + i) % c.length];
+    return '<div class="mk-ad"><b>' + comp.name + '</b><small>' + M.geo.areaCity + ' ' + M.geo.core + ' 전문 · 상담/예약 · 방문 전 문의</small></div>';
+  }).join('');
+  const rows = []; let n = 0;
+  const comp = i => c[i % c.length];
+  const row = (rank, nm, cat, rv, me) => '<div class="mk-row' + (me ? ' me' : '') + '"><span class="rn">' + rank + '</span><div class="th"></div><div><strong>' + nm + (me ? ' <span style="color:#16a34a;font-size:7px">◀ 내 업체</span>' : '') + '</strong><small>' + cat + ' · ★' + (me ? M.place.rating : comp(n).rating) + ' · 리뷰 ' + nf(rv) + '</small></div></div>';
+  if (k.rank <= 3) {
+    for (let r = 1; r <= 4; r++) { if (r === k.rank) rows.push(row(r, M.name, M.place.cat, M.place.reviews, true)); else { rows.push(row(r, comp(n).name, M.place.cat, comp(n).reviews, false)); n++; } }
+  } else {
+    for (let r = 1; r <= 3; r++) { rows.push(row(r, comp(n).name, M.place.cat, comp(n).reviews, false)); n++; }
+    rows.push('<div class="mk-more">⋮</div>');
+    rows.push(row(k.rank, M.name, M.place.cat, M.place.reviews, true));
+  }
+  return '<div class="mk"><div class="mk-st"><span>9:41</span><span>LTE ▮▮▮</span></div><div class="mk-bar"><span class="mk-n">N</span><span class="mk-q">' + k.kw + '</span></div>' +
+    '<div class="mk-tabs"><span class="on">통합</span><span>VIEW</span><span>지도</span><span>이미지</span><span>쇼핑</span></div>' +
+    '<div class="mk-sec" style="position:relative"><i class="pin">1</i><div class="mk-h">파워링크 <em>광고</em></div>' + ads + '</div>' +
+    '<div class="mk-sec" style="position:relative"><i class="pin">2</i><div class="mk-h"><i class="fa-solid fa-location-dot" style="color:#03c75a"></i>플레이스</div>' + rows.join('') + '</div></div>';
+}
+function mockPlace(M) {
+  const p = M.place, cfg = M.cfg;
+  return '<div class="mk"><div class="mk-st"><span>9:41</span><span>LTE ▮▮▮</span></div>' +
+    '<div class="mk-hero"><i class="pin" style="right:auto;left:5px">1</i><span class="cnt"><i class="fa-regular fa-image"></i> 사진 ' + p.photos + '</span></div>' +
+    '<div style="background:#fff;padding:6px 8px"><div style="font-weight:900;font-size:11px;line-height:1.2">' + M.name + '</div><div class="small" style="font-size:7.5px">' + p.cat + ' · ' + M.geo.areaLocal + '</div>' +
+    '<div style="margin-top:2px;font-size:7.8px"><b style="color:#f59e0b">★ ' + p.rating + '</b> · 방문자 리뷰 <b>' + nf(p.reviews) + '</b> · 블로그 리뷰 <b>' + nf(p.blogRev) + '</b></div></div>' +
+    '<div class="mk-btns"><span><i class="fa-solid fa-phone"></i>전화</span><span><i class="fa-regular fa-calendar-check"></i>예약</span><span><i class="fa-regular fa-bookmark"></i>저장</span><span><i class="fa-solid fa-route"></i>길찾기</span></div>' +
+    '<div class="mk-tab2"><span class="on">홈</span><span>소식</span><span>' + cfg.itemNoun.split('·')[0] + '</span><span>리뷰</span><span>사진</span><span>정보</span></div>' +
+    '<div class="mk-sec" style="position:relative"><i class="pin">2</i><div class="mk-h">새소식</div><div style="border:1px dashed #cbd5e1;border-radius:5px;padding:8px 4px;text-align:center;color:#94a3b8;font-size:7.8px">' + (p.news ? '최근 소식이 등록되어 있습니다' : '등록된 소식이 없습니다') + '<br><b style="color:' + (p.news >= 4 ? '#16a34a' : '#dc2626') + '">최근 30일 ' + p.news + '건</b></div></div>' +
+    '<div class="mk-sec" style="position:relative"><i class="pin">3</i><div class="mk-h">방문자 리뷰 · 사장님 답글</div><div style="font-size:7.8px;color:#334155">최근 리뷰 10건 중 답글 <b style="color:#166534">' + p.reply + '건</b> 등록<br><span class="small" style="font-size:7px">사진 리뷰 비중 낮음 · 대표 사진 갱신 필요</span></div></div></div>';
+}
+function p7(M) {
+  const tv = M.kwAgg.topVol;
+  const k1 = tv[0], k2 = tv.find(k => k !== k1 && k.cat !== k1.cat) || tv[1];
+  const cap = (k, i, m) => '<div class="card sl" style="margin-top:6px;font-size:9px;line-height:1.55"><b>' + (i === 0 ? '검색 화면 ①' : '검색 화면 ②') + ' — \'' + k.kw + '\'</b><br><span class="mxb">1</span>파워링크 상단 ' + M.ads.compCount[k.idx] + '곳 노출' + (M.ads.kwOn[k.idx] ? ' (내 광고 일부 포함)' : ' — <b style="color:#dc2626">내 업체 미노출</b>') + '<br><span class="mxb">2</span>플레이스 <b>' + rk(k.rank) + '</b>' + (k.rank > 3 ? ' → 스크롤 후에야 노출' : ' → 상단 노출') + '</div>';
+  return H.title('07', '실제 검색 화면', '네이버 모바일 · ' + M.issuedStr + ' 기준 시뮬레이션') +
+    '<div style="display:flex;gap:14px;justify-content:center">' + mockSearch(M, k1, 0) + mockSearch(M, k2, 2) + mockPlace(M) + '</div>' +
+    '<div style="display:flex;gap:14px;justify-content:center"><div style="width:218px">' + cap(k1, 0) + '</div><div style="width:218px">' + cap(k2, 1) + '</div>' +
+    '<div style="width:218px"><div class="card sl" style="margin-top:6px;font-size:9px;line-height:1.55"><b>플레이스 상세 홈</b><br><span class="mxb">1</span>사진 ' + M.place.photos + '장 (권장 ' + M.place.photoTarget + '장)<br><span class="mxb">2</span>새소식 <b style="color:#dc2626">0건</b> — 최신성 신호 부재<br><span class="mxb">3</span>답글 ' + M.place.reply + '/10 — 응대는 양호</div></div></div>' +
+    H.st('입력 키워드별 모바일 첫 화면 노출 판정') +
+    H.table(['키워드', '파워링크 경쟁', '내 광고', '플레이스 순위', '첫 화면 노출', '스크롤 위치'], M.kws.map((k, i) => [
+      '<b>' + k.kw + '</b>', M.ads.compCount[i] + '곳', M.ads.kwOn[i] ? H.badge('노출', 'g') : H.badge('미노출', 'r'), '<b>' + rk(k.rank) + '</b>',
+      k.rank <= 3 ? H.badge('상단 노출', 'g') : k.rank <= 7 ? H.badge('스크롤 필요', 'y') : H.badge('첫 화면 밖', 'r'),
+      k.rank <= 3 ? '화면 1~2번째 블록' : k.rank <= 7 ? '약 2~3 화면 아래' : k.rank <= 28 ? '더보기 클릭 후' : '사실상 탐색 불가'
+    ]), 'lcccc' + 'l') +
+    H.note('<b>방문자 시선 해석</b> — 모바일 검색 첫 화면에서 파워링크와 플레이스 상위 3개가 클릭의 대부분을 차지합니다. 현재 \'' + k1.kw + '\' ' + rk(k1.rank) + ', \'' + k2.kw + '\' ' + rk(k2.rank) + '로 첫 화면 노출이 제한적이며, 상세 홈에서는 <b>소식 0건·사진 부족</b>이 전환을 낮추는 요인입니다. <span class="small">(화면은 조회 시점·기기에 따라 달라지는 시뮬레이션 목업)</span>');
+}
+
+/* ---- P.8 네이버 플레이스 ---- */
+function p8(M) {
+  const p = M.place, ca = M.compAvg;
+  const cards = [
+    ['방문자 리뷰', nf(p.reviews) + '건', '경쟁 평균 ' + nf(ca.reviews) + '건 · ' + Math.round(p.reviews / ca.reviews * 100) + '%', p.reviews / ca.reviews, '#dc2626', '부족'],
+    ['등록 사진', p.photos + '장', '권장 ' + p.photoTarget + '장 · 경쟁 평균 ' + ca.photos + '장', p.photos / p.photoTarget, '#dc2626', '부족'],
+    ['최근 소식', p.news + '건', '월 4건 권장 · 경쟁 평균 ' + ca.news + '건', p.news / 4, p.news >= 4 ? '#16a34a' : '#dc2626', p.news >= 4 ? '양호' : p.news ? '부족' : '없음'],
+    ['사장님 답글', p.reply + '/10', '최근 리뷰 10건 중 답글 ' + p.reply + '건', p.reply / 10, '#16a34a', '양호']
+  ].map(c => '<div class="kpi"><div class="k">' + c[0] + ' ' + H.badge(c[5], c[5] === '양호' ? 'g' : 'r') + '</div><div class="v" style="color:' + c[4] + '">' + c[1] + '</div><div style="margin:3px 0">' + H.bar(Math.min(c[3], 1) * 100, c[4]) + '</div><div class="s">' + c[2] + '</div></div>').join('');
+  const rows = M.chk.map((c, i) => [(i + 1), '<b>' + c.item + '</b>', c.now, c.std, H.badge(c.st, H.st3(c.st)), c.fix]);
+  const sc = M.chMap.place.s;
+  return H.title('08', '네이버 플레이스 진단', 'Place Optimization') +
+    '<div class="g4">' + cards + '</div>' +
+    H.st('6대 체크리스트') + H.table(['#', '점검 항목', '현재 상태', '권장 기준', '판정', '개선 포인트'], rows, 'cllcll') +
+    H.st('플레이스 노출 영향 요인 점검 (내 업체 vs 경쟁 평균)') +
+    '<div class="card">' + [
+      ['관련성 (키워드·카테고리·소개글 정합)', clamp(Math.round(100 - M.kwAgg.avgRank * 1.3), 20, 80), clamp(Math.round(100 - M.kwAgg.avgRank * 1.3) + 14, 40, 90)],
+      ['인기도 (리뷰·저장·방문 반응)', Math.round(Math.min(p.reviews / ca.reviews, 1) * 80), 70],
+      ['최신성 (소식·사진·정보 갱신)', Math.round(12 + p.photos / p.photoTarget * 30), 74],
+      ['정보 충실도 (체크리스트 충족)', Math.round(M.chkOk / 6 * 100), 82]
+    ].map(x => '<div style="display:flex;align-items:center;gap:7px;margin:5px 0"><span style="width:200px;font-size:9.5px">' + x[0] + '</span><div style="flex:1">' + H.cmpBar(x[1], x[2], x[1] >= x[2] * 0.8 ? '#16a34a' : x[1] >= x[2] * 0.55 ? '#f59e0b' : '#dc2626') + '</div><b style="width:66px;text-align:right;font-size:9.5px">' + x[1] + ' <span style="color:#94a3b8;font-weight:600">/ ' + x[2] + '</span></b></div>').join('') +
+    '<div class="small">막대 = 내 업체 · 검정 선 = 경쟁 평균(추정). 점검 관점 4축은 공개 가이드와 업계 통용 기준을 정리한 분석 틀이며, 네이버 내부 순위 알고리즘을 의미하지 않습니다.</div></div>' +
+    '<div class="g3"><div class="card gr"><div class="st" style="margin-bottom:3px;color:#166534">STEP 1 · 1~2주</div><div style="font-size:9.6px;line-height:1.55">사진 ' + (p.photoTarget - p.photos) + '장 확충 · 영업시간/' + M.cfg.itemNoun.split('·')[0] + ' 정보 완결</div></div><div class="card bl"><div class="st" style="margin-bottom:3px;color:#1d4ed8">STEP 2 · 3~4주</div><div style="font-size:9.6px;line-height:1.55">주 1회 소식 발행 시작 · 예약/톡톡 연결 · 대표 키워드 5개 재설정</div></div><div class="card am"><div class="st" style="margin-bottom:3px;color:#92400e">STEP 3 · 2개월~</div><div style="font-size:9.6px;line-height:1.55">리뷰 유입 동선 · 답글 ' + p.reply + '→10/10 · 월간 순위 점검</div></div></div>' +
+    '<div class="row"><div class="card sl" style="width:188px;flex:none;text-align:center;padding:10px 8px"><div class="small">플레이스 채널 점수</div>' + gauge(sc, 150, '#f8fafc', sc >= 60 ? '#16a34a' : '#f59e0b', '#e2e8f0', '#0f172a') + '<div class="small" style="margin-top:4px">가중치 ' + M.chMap.place.w + ' · 배점 ' + M.chMap.place.pts + '점</div></div>' +
+    '<div class="card" style="flex:1"><div class="st" style="margin-bottom:5px">총평</div><div style="font-size:10.2px;line-height:1.75;color:#1e293b">\'' + M.name + '\' 플레이스는 ' + (p.reply >= 9 ? '리뷰 답글 응대가 <b>안정적</b>이나' : '리뷰 응대 기본기는 갖췄으나') + ', <b>최근 소식 ' + p.news + '건</b>과 사진 <b>' + p.photos + '장(권장 대비 ' + Math.round(p.photos / p.photoTarget * 100) + '%)</b>이 노출 경쟁력의 가장 큰 약점입니다. ' +
+    '체크리스트 6개 중 양호는 <b>' + M.chkOk + '개</b>에 그치며, 플레이스 순위 알고리즘이 반영하는 최신성·정보 충실도·반응성 중 <b>최신성</b>이 크게 부족합니다. 우선 사진 ' + (p.photoTarget - p.photos) + '장 이상 확충과 주 1회 소식 발행만으로도 \'' + (M.road.up[0] ? M.road.up[0].kw : M.kws[0].kw) + '\' 등 올리기 키워드의 순위 상향 여력이 큽니다.</div></div></div>';
+}
+
+/* ---- P.9 블로그 바이럴 ---- */
+function blogTrend(M) {
+  const r = makeRng(M.seed ^ 0x9191);
+  const issued = M.issued;
+  const mine = [], comp = [];
+  let cur = M.blog.blog30;
+  for (let i = 5; i >= 0; i--) { mine[i] = i === 0 ? M.blog.blog30 : Math.max(1, Math.round(cur * r.range(0.6, 1.25))); cur = mine[i] || cur; comp[i] = Math.max(6, Math.round(M.compAvg.blog30 * r.range(0.8, 1.2))); }
+  const mx = Math.max.apply(null, mine.concat(comp));
+  const cols = [];
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(issued.getFullYear(), issued.getMonth() - i, 1);
+    cols.push('<div style="flex:1;text-align:center"><div style="display:flex;align-items:flex-end;justify-content:center;gap:3px;height:62px"><div style="width:13px;height:' + Math.max(3, Math.round(mine[i] / mx * 56)) + 'px;background:#16a34a;border-radius:3px 3px 0 0"></div><div style="width:13px;height:' + Math.max(3, Math.round(comp[i] / mx * 56)) + 'px;background:#cbd5e1;border-radius:3px 3px 0 0"></div></div><div class="small" style="margin-top:2px">' + (d.getMonth() + 1) + '월</div><div style="font-size:8.5px"><b>' + mine[i] + '</b> / ' + comp[i] + '</div></div>');
+  }
+  return '<div class="card"><div class="small" style="margin-bottom:4px"><b style="color:#16a34a">■</b> 내 업체 게시 건수 &nbsp;<b style="color:#94a3b8">■</b> 경쟁 평균 &nbsp;· 월별 상호 키워드 블로그 신규 게시 건수</div><div style="display:flex;gap:6px">' + cols.join('') + '</div></div>';
+}
+function blogLiveNote(M) {
+  const own = M.blog.mentions, cs = M.comps.filter(c => c.blogTotal !== undefined);
+  if (own === undefined && !cs.length) return '';
+  return H.note('<b>네이버 블로그 검색 API 실측</b> (누적 검색 결과 수, ' + M.live.blog.queriedAt.slice(0, 10) + ' 조회) — ' + (own !== undefined ? '\'' + M.name + '\' ' + nf(own) + '건' : '') + cs.map(c => ' · ' + c.name + ' ' + nf(c.blogTotal) + '건').join('') + '. 상호명 검색 결과에는 동명 업체·광고성 글이 섞일 수 있어 참고 지표로 해석합니다.');
+}
+function p9(M) {
+  const b = M.blog, p = M.place, ca = M.compAvg;
+  const cmp = [
+    ['플레이스 연동 블로그 리뷰', nf(p.blogRev) + '건', nf(ca.blogRev) + '건', M.comps[0].blogRev + '건', Math.round(p.blogRev / ca.blogRev * 100)],
+    ['최근 30일 \'' + M.name + '\' 블로그 신규 게시', b.blog30 + '건', ca.blog30 + '건', M.comps[0].blog30 + '건', Math.round(b.blog30 / ca.blog30 * 100)],
+    ['핵심 키워드 블로그 상위 10 점유율', b.share + '%', b.compShare + '%', Math.round(b.compShare * 1.4) + '%', Math.round(b.share / b.compShare * 100)]
+  ].map(r => ['<b>' + r[0] + '</b>', r[1], r[2], r[3], '<div style="display:flex;align-items:center;gap:5px"><div style="flex:1">' + H.bar(r[4], '#dc2626') + '</div><b>' + r[4] + '%</b></div>']);
+  const rows = M.posts.map(x => [x.date, '<div style="font-weight:700;line-height:1.35">' + x.title + '</div><div class="small">작성자 ' + x.blogger + '</div>', x.own ? H.badge('자사', 'g') : H.badge('경쟁', 'r'), H.badge(x.type, x.type === '정보성' ? 'b' : 'p'),
+    (x.hasName ? H.badge('상호', 'g') + ' ' : '') + (x.hasArea ? H.badge('지역', 'b') + ' ' : H.badge('지역 ✕', 'r') + ' ') + (x.hasCore ? H.badge(M.cfg.key === 'food' ? '메뉴' : '품목', 'y') : H.badge('품목 ✕', 'r'))]);
+  const ownN = M.posts.filter(x => x.own).length;
+  return H.title('09', '블로그 바이럴 분석', 'Blog Viral Analysis') +
+    H.st('플레이스 · 경쟁사 블로그 수치 비교') + H.table(['지표', '내 업체', '경쟁 평균', '1위 경쟁점', '내 업체 / 경쟁 평균'], cmp, 'lcccl') + blogLiveNote(M) +
+    H.st('최근 블로그 게시글 표본 분석 (6건)') + H.table(['게시일', '제목', '구분', '유형', '키워드 포함'], rows, 'llccl') +
+    '<div class="g3"><div class="card"><div class="small">표본 중 자사 게시</div><div style="font-size:20px;font-weight:900">' + ownN + '<span class="small">/' + M.posts.length + '건</span></div></div><div class="card"><div class="small">상호 직접 노출 게시</div><div style="font-size:20px;font-weight:900;color:#b45309">' + M.posts.filter(x => x.hasName).length + '<span class="small">건</span></div></div><div class="card"><div class="small">경쟁사 병기 노출 게시</div><div style="font-size:20px;font-weight:900;color:#dc2626">' + M.posts.filter(x => !x.own).length + '<span class="small">건</span></div></div></div>' +
+    H.st('최근 6개월 상호 블로그 게시 추이 (추정)') + blogTrend(M) +
+    H.st('바이럴 전략') +
+    '<div class="g2"><div class="card gr"><ul class="ls"><li><b>월 ' + M.road.blogTarget + '건</b> 정기 발행 체계 (경쟁 평균 ' + ca.blog30 + '건의 60% 이상 목표)</li><li>제목 공식: <b>[' + M.geo.a + '] + [' + M.geo.core + '] + [상호]</b> 3요소 포함</li><li>' + (M.cfg.key === 'medical' ? '정보성 칼럼 중심 (치료경험담·후기 형식 배제, 의료법 제56조)' : '방문후기 40% · 정보성 40% · 이벤트·소식 20% 비율 설계') + '</li></ul></div>' +
+    '<div class="card am"><ul class="ls"><li>경쟁사 비교형 게시글에서 <b>내 업체 병기</b> 비율 확대 (현재 0건)</li><li>플레이스 블로그 리뷰 ' + nf(p.blogRev) + '건 → <b>' + nf(Math.round(p.blogRev * 1.5)) + '건</b> (90일)</li><li>' + (M.cfg.key === 'medical' ? '협찬·체험단 원고는 법규상 제외' : '체험단 활용 시 "광고/제공 받음" 표기 의무 준수') + '</li></ul></div></div>' +
+    '<div class="small">※ 블로그 표본은 \'' + M.geo.a + '\'·\'' + M.geo.core + '\'·상호 키워드 조합 검색 결과를 모사한 시뮬레이션이며 실제 게시글 제목과 다를 수 있습니다. 실측은 네이버 블로그 탭 검색으로 검증하세요.</div>';
+}
+
+/* ---- P.10 지도 채널 점검 ---- */
+function mapContext(M) {
+  const r = makeRng(M.seed ^ 0x1010);
+  const b = r.int(18, 24), c = r.int(8, 12), d = r.int(4, 8), a = 100 - b - c - d;
+  const shares = [a, b, c, d];
+  const ctx = ['모바일 통합검색·지도·예약의 주 유입 경로', '길찾기·장소 검색 중심의 이동 시점 유입', '해외·외국인 및 구글 검색 결과 지식패널 노출', '내비게이션 목적지 검색·주차 안내'];
+  const rows = M.maps.map((m, i) => {
+    const issue = !m.reg || !m.name || !m.addr || !m.tel || (m.key !== 'naver' && m.photos < 5);
+    return ['<b>' + m.label + '</b>', ctx[i], '<b>' + shares[i] + '%</b>', issue ? H.badge('보완 필요', 'r') : H.badge('양호', 'g'), i === 0 ? '1순위 (상시 관리)' : i === 1 ? '2순위 (정보 통일)' : i === 2 ? '3순위 (등록·사진)' : '4순위 (등록 확인)'];
+  });
+  return H.table(['채널', '주 이용 맥락', '유입 비중(추정)', '현재 대응', '조치 우선순위'], rows, 'llcc' + 'l');
+}
+function p10(M) {
+  const ok = t => H.badge(t, 'g'), ng = t => H.badge(t, 'r');
+  const rows = M.maps.map(m => [
+    '<b>' + m.label + '</b>', m.reg ? ok('등록') : ng('미등록'), m.reg ? (m.name ? ok('일치') : ng('상이')) : '-', m.reg ? (m.addr ? ok('일치') : ng('상이')) : '-', m.reg ? (m.tel ? ok('일치') : ng('누락·상이')) : '-', m.reg ? m.photos + '장' : '-', m.reg ? nf(m.rev) + '건' : '-'
+  ]);
+  const issues = M.mapIssueList.map(x => [x.sev, x.m.label, x.text, x.fix]);
+  const sevOrder = { '상': 0, '중': 1, '하': 2 };
+  issues.sort((a, b) => sevOrder[a[0]] - sevOrder[b[0]]);
+  const sevB = s => H.badge(s === '상' ? '심각' : s === '중' ? '주의' : '경미', s === '상' ? 'r' : s === '중' ? 'y' : 's');
+  const irows = issues.slice(0, 9).map((x, i) => [i + 1, sevB(x[0]), x[1], x[2], x[3]]);
+  const cnt = s => issues.filter(x => x[0] === s).length;
+  return H.title('10', '지도 채널 점검', '네이버 · 카카오 · 구글 · 티맵') +
+    '<div class="g4">' + H.kpi('정보 일치율', Math.round(M.consist * 100) + '%', '4개 채널 · 16개 항목', M.consist < 0.7 ? '#b45309' : '#166534') + H.kpi('발견 이슈', M.mapIssues + '건', '미등록·불일치·사진 부족', '#b91c1c') + H.kpi('심각 / 주의', cnt('상') + ' / ' + cnt('중') + '건', '우선 조치 대상') + H.kpi('정보 일관성 점수', M.chMap.info.s + '점', '가중치 ' + M.chMap.info.w + ' · 배점 ' + M.chMap.info.pts, '#166534') + '</div>' +
+    H.st('4대 지도 앱 일관성 검증') + H.table(['채널', '등록', '상호', '주소', '전화·영업시간', '사진', '리뷰'], rows, 'lccccrr') +
+    H.st('이슈 심각도 표') + H.table(['#', '심각도', '채널', '이슈 내용', '조치 방법'], irows, 'ccllL') +
+    H.st('채널별 이용 맥락 · 유입 영향 (추정)') + mapContext(M) +
+    H.note('<b>왜 중요한가</b> — 고객은 네이버뿐 아니라 카카오맵 길찾기, 구글 지도 검색, 티맵 내비 목적지 검색으로도 방문합니다. 채널 간 상호·주소·전화 불일치는 신뢰 하락과 방문 이탈(잘못된 위치 안내)로 이어지며 플레이스 점수의 <b>정보 일관성(' + M.chMap.info.w + ')</b> 항목에 직접 반영됩니다.') +
+    '<div class="small">※ 카카오맵 로컬 검색, 구글 지도 공개 페이지, TMAP 장소 검색 결과를 기준으로 점검하는 항목이며, 본 표는 입력 정보 기반 추정입니다. 실제 등록 상태는 각 앱에서 직접 확인하세요.</div>';
+}
+
+/* ---- P.11 외부 채널 & 광고 ---- */
+function p11(M) {
+  const r = makeRng(M.seed ^ 0x1111), cfg = M.cfg;
+  const sns = [
+    ['인스타그램', r.chance(0.72), '계정 프로필·게시물 수 확인'], ['네이버 블로그 (공식)', r.chance(0.5), '공식 블로그 개설 여부'], ['유튜브·숏폼', r.chance(0.25), '채널·쇼츠 개설 여부'], ['카카오톡 채널', r.chance(0.55), '채널 추가·상담 연동'], ['네이버 톡톡·예약', r.chance(0.5), '플레이스 연동 여부']
+  ];
+  const sRows = sns.map(x => [
+    '<b>' + x[0] + '</b>', x[1] ? H.badge('개설 확인', 'g') : H.badge('미확인', 'r'), x[1] ? '활동량 판정 보류' : '-', x[1] ? (r.chance(0.5) ? '플레이스 연결' : '미연결') : '-', x[1] ? '공개 지표만 확인, 점수 제외' : '개설 시 동선 연결 권장'
+  ]);
+  const ad = (on) => on ? H.badge('집행 확인', 'g') : H.badge('미집행', 'r');
+  const kRows = M.kws.map((k, i) => [k.kw, ad(M.ads.kwOn[i]), M.ads.compCount[i] + '곳', nf(k.cpc) + '원', (k.vol * 0.018 * k.cpc > 0 ? nf(roundTo(k.vol * 0.018 * k.cpc, 1000)) : '-') + '원']);
+  const aRows = [
+    ['네이버 파워링크', M.ads.kwOn.some(x => x) ? H.badge('일부 집행', 'y') : H.badge('미집행', 'r'), M.ads.compCount[0] + '~' + Math.max.apply(null, M.ads.compCount) + '곳 / 키워드', '조회 시점 표본'],
+    ['네이버 플레이스 광고', M.ads.placeAd ? H.badge('집행 확인', 'g') : H.badge('미집행', 'r'), M.comps.filter(c => c.ads).length + '/4곳 집행', '목록 상단 광고 표기'],
+    [cfg.key === 'retail' ? '쇼핑검색광고' : '브랜드검색', M.ads.brandSearch ? H.badge('집행 확인', 'g') : H.badge('미집행', 'r'), cfg.key === 'retail' ? '상위 상품 광고 노출' : '상호 검색 시 상단 점유', '상호 키워드 방어'],
+    ['카카오·구글 키워드 광고', H.badge('확인 불가', 's'), '-', '외부 계정 영역']
+  ];
+  return H.title('11', '외부 채널 · 광고 점검', 'Social & Paid Media') +
+    H.st('SNS 연동 현황') + H.table(['채널', '개설 여부', '활동량', '플레이스 연동', '비고'], sRows, 'lcccl') +
+    H.note('<b>점수 산정 안내</b> — SNS(가중치 ' + cfg.w.sns + ')는 공개 지표만으로 활동량(게시 빈도·도달)을 확인할 수 없어 <b>점수에서 제외</b>하고 나머지 6개 채널로 100점을 재산정했습니다. 개설·연동 현황만 참고 항목으로 제시합니다.') +
+    H.st('유료 광고 집행 현황 (조회 시점 표본)') + H.table(['광고 유형', '내 업체', '경쟁 현황', '점검 기준'], aRows, 'lcll') +
+    H.st('키워드별 광고 점검 · 예상 비용') + H.table(['키워드', '내 광고', '경쟁 광고', '예상 CPC', '클릭률 1.8% 가정 월 비용(추정)'], kRows, 'lcc' + 'rr') +
+    '<div class="row"><div class="card bl" style="flex:1"><div class="st" style="margin-bottom:3px">테스트 예산 제안</div><div style="font-size:19px;font-weight:900;color:#1d4ed8">월 ' + nf(M.ads.budget) + '원</div><div class="small">상위 3개 검색량 키워드 기준 · 소액 테스트 후 전환 키워드로 압축</div></div>' +
+    '<div class="card sl" style="flex:2"><div class="st" style="margin-bottom:3px">광고 관점 진단</div><div style="font-size:9.8px;line-height:1.65;color:#1e293b">' + (M.ads.on ? '일부 키워드 광고 흔적이 있으나 키워드·소재 구조화가 미흡합니다.' : '경쟁 ' + M.ads.compCount[0] + '곳이 핵심 키워드 파워링크를 선점한 동안 <b>광고 미집행</b> 상태로 첫 화면 상단 노출을 전부 내주고 있습니다.') + ' 광고 채널 점수 <b>' + M.chMap.ads.s + '점</b>(가중치 ' + M.chMap.ads.w + ')으로, ' + cfg.label + ' 업종 CPC 범위 ' + nf(cfg.cpc[0]) + '~' + nf(cfg.cpc[1]) + '원 내에서 효율 키워드부터 단계 집행을 권장합니다.</div></div></div>' +
+    '<div class="small">※ CPC·예산은 업종 평균 범위를 반영한 추정값입니다. 실제 입찰가는 네이버 검색광고 키워드도구·입찰 시뮬레이터로 확인하세요.</div>';
+}
+
+/* ---- P.12 경쟁업체 비교 ---- */
+function p12(M) {
+  const p = M.place, c = M.comps;
+  const rows = [['<b>' + M.name + '</b> ' + H.badge('내 업체', 'g'), nf(p.reviews), nf(p.blogRev), p.photos, p.news, p.reply + '/10', M.ads.on ? '일부' : '미집행', p.rating, M.kwAgg.avgRank + '위']]
+    .concat(c.map(x => [x.name, nf(x.reviews), nf(x.blogRev), x.photos, x.news, x.reply + '/10', x.ads ? '집행' : '미집행', x.rating, x.avgRank + '위']));
+  const maxR = Math.max.apply(null, c.map(x => x.reviews).concat([p.reviews]));
+  const bars = [{ n: M.name, v: p.reviews, me: true }].concat(c.map(x => ({ n: x.name, v: x.reviews }))).map(x => '<div style="display:flex;align-items:center;gap:6px;margin:3px 0"><span style="width:128px;font-size:9px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;' + (x.me ? 'font-weight:800' : '') + '">' + x.n + '</span><div style="flex:1">' + H.bar(x.v / maxR * 100, x.me ? '#16a34a' : '#94a3b8') + '</div><b style="width:42px;text-align:right;font-size:9px">' + nf(x.v) + '</b></div>').join('');
+  const top = c[0];
+  return H.title('12', '경쟁업체 비교', M.geo.areaLocal + ' 상권 · 동종 4사') +
+    H.table(['업체', '방문자 리뷰', '블로그 리뷰', '사진', '소식(30일)', '답글', '광고', '평점', '키워드 평균순위'], rows, 'lrrrrccrr', '', 0) +
+    '<div class="g2"><div class="card"><div class="st" style="margin-bottom:4px">방문자 리뷰 규모 비교</div>' + bars + '</div>' +
+    '<div class="card"><div class="st" style="margin-bottom:4px">1위 경쟁점 격차 (vs ' + top.name + ')</div>' +
+    [['방문자 리뷰', top.reviews / Math.max(1, p.reviews)], ['블로그 리뷰', top.blogRev / Math.max(1, p.blogRev)], ['등록 사진', top.photos / Math.max(1, p.photos)], ['소식(30일)', top.news / Math.max(0.5, p.news)]].map(x => '<div style="display:flex;justify-content:space-between;font-size:9.8px;padding:2px 0;border-bottom:1px dashed #e2e8f0"><span>' + x[0] + '</span><b style="color:#b91c1c">' + (x[0] === '소식(30일)' ? '내 ' + p.news + '건 vs ' + top.news + '건' : x[1].toFixed(1) + '배') + '</b></div>').join('') + '</div></div>' +
+    H.chCmp(M, '6대 채널 점수 vs 상위권 평균') +
+    H.st('경쟁사별 위협도 분석') + H.table(['경쟁업체', '주요 강점', '약점', '위협도'], c.map((x, i) => {
+      const strengths = []; if (x.reviews > p.reviews * 2) strengths.push('리뷰 규모 ' + (x.reviews / Math.max(1, p.reviews)).toFixed(1) + '배'); if (x.news >= 6) strengths.push('소식 월 ' + x.news + '건'); if (x.ads) strengths.push('광고 선점'); if (x.photos >= 60) strengths.push('사진 ' + x.photos + '장'); if (!strengths.length) strengths.push('상권 인지도');
+      const weak = []; if (x.reply <= 6) weak.push('답글 ' + x.reply + '/10'); if (!x.ads) weak.push('광고 미집행'); if (x.news < 4) weak.push('소식 부족'); if (!x.phoneOk) weak.push('전화 정보 상이'); if (!weak.length) weak.push('뚜렷한 약점 없음');
+      return ['<b>' + x.name + '</b>', strengths.join(' · '), weak.join(' · '), i === 0 ? H.badge('높음', 'r') : i === 1 ? H.badge('높음', 'r') : i === 2 ? H.badge('중간', 'y') : H.badge('보통', 'b')];
+    }), 'lllc') +
+    H.st('벤치마킹 포인트') +
+    '<div class="g2"><div class="card gr"><div class="st" style="margin-bottom:3px;color:#166534">따라잡을 지표</div><ul class="ls"><li><b>' + top.name + '</b>: 소식 월 ' + top.news + '건 · 사진 ' + top.photos + '장으로 상세 홈 최신성 우위</li><li>상위 2개 업체 평균 리뷰 ' + nf(Math.round((c[0].reviews + c[1].reviews) / 2)) + '건 — 90일 내 ' + nf(M.road.reviewTarget) + '건(+35%) 1차 목표</li><li>경쟁 ' + c.filter(x => x.ads).length + '/4곳이 광고 병행 — 핵심 키워드 상단 방어 필요</li></ul></div>' +
+    '<div class="card am"><div class="st" style="margin-bottom:3px;color:#92400e">내가 앞서는 지표</div><ul class="ls"><li>답글 ' + p.reply + '/10' + (c.some(x => x.reply < p.reply) ? ' — 경쟁 ' + c.filter(x => x.reply < p.reply).length + '곳보다 높은 응대율' : ' — 경쟁사 수준 유지') + '</li><li>평점 ' + p.rating + (c.some(x => x.rating < p.rating) ? ' — 일부 경쟁점 대비 우위' : ' — 경쟁점과 근소 차이') + ', 리뷰 질 관리 여지</li><li>입력 키워드 중 지키기 ' + M.road.keep.length + '개 보유 — 로컬 키워드 방어력</li></ul></div></div>' +
+    H.note('<b>종합</b> — 경쟁 구도의 핵심 차이는 <b>리뷰 규모(' + (top.reviews / Math.max(1, p.reviews)).toFixed(1) + '배)</b>와 <b>소식·사진 활동량</b>입니다. 내 업체는 응대 품질이라는 기본기를 갖췄으므로 콘텐츠 활동량만 보완하면 격차를 줄일 수 있습니다.<br><span class="small">경쟁 업체명은 업종·상권 특성에 맞춘 추정 매핑이며, 실제 경쟁사는 카카오 로컬 API 카테고리 검색 후 확정하세요.</span>');
+}
+
+/* ---- P.13 운영 방식 추정 ---- */
+function p13(M) {
+  const o = M.ops;
+  const sRows = o.signals.map((s, i) => [i + 1, '<b>' + s.sig + '</b>', s.hint, H.badge(s.dir, s.dir.indexOf('자체') >= 0 ? 'b' : s.dir.indexOf('위탁') >= 0 ? 'y' : 's')]);
+  const aRows = [['place', '플레이스 관리'], ['review', '리뷰·평판'], ['blog', '블로그 콘텐츠'], ['ads', '광고 운영'], ['info', '정보 일관성']].map(x => {
+    const s = M.chMap[x[0]].s, bn = M.bench[x[0]];
+    return [x[1], '<b>' + s + '</b>', bn, '<span style="color:#b91c1c;font-weight:800">-' + (bn - s) + '</span>', H.bar(s / bn * 100, s / bn < 0.7 ? '#dc2626' : '#f59e0b'), s >= 60 ? H.badge('양호', 'g') : s >= 45 ? H.badge('보완', 'y') : H.badge('미흡', 'r')];
+  });
+  return H.title('13', '운영 방식 추정', 'Operation Pattern Estimation') +
+    '<div class="row"><div class="card sl" style="width:236px;flex:none;text-align:center"><div class="small">전문 대행사 이용 가능성 (추정)</div>' + gauge(o.agencyProb, 190, '#f8fafc', '#2563eb', '#e2e8f0', '#0f172a') +
+    '<div style="margin-top:6px"><b style="font-size:11.5px;color:#1d4ed8">' + o.verdict + '</b></div><div class="small" style="margin-top:3px">낮음 &lt;25 · 부분 25~40 · 높음 40↑</div></div>' +
+    '<div class="card" style="flex:1"><div class="st" style="margin-bottom:4px">판단 요약</div><div style="font-size:10.2px;line-height:1.75;color:#1e293b">\'' + M.name + '\'은(는) 포착된 운영 신호 ' + o.signals.length + '건을 종합할 때 <b>' + o.verdict + '</b>으로 판단됩니다. 리뷰 답글(' + M.place.reply + '/10)은 직접 응대 패턴이 보이는 반면 <b>소식 0건·사진 갱신 중단·지도 정보 불일치</b>는 플레이스를 체계적으로 관리하는 담당자·도구가 없음을 시사합니다. 따라서 채널별 정기 운영 루틴을 설계해 주기만 해도 개선 속도가 빠를 것으로 예상됩니다.</div></div></div>' +
+    H.st('포착 신호 근거') + H.table(['#', '포착 신호', '해석', '시사점'], sRows, 'cllc') +
+    H.st('영역별 성과표 (상위 25% 업소 평균 대비)') + H.table(['영역', '내 점수', '상위권 평균', '격차', '달성도', '판정'], aRows, 'lccccc') +
+    H.st('권장 운영 루틴 (자체 운영 기준)') +
+    H.table(['주기', '업무', '목표 수치', '예상 소요'], [
+      ['<b>주간</b>', '소식 1건 발행 · 신규 리뷰 답글 · 사진 3장 이상 업로드', '소식 월 4건 · 답글 10/10', '약 40분'],
+      ['<b>격주</b>', '지도 4채널 정보 대조(영업시간·휴무·전화) · 핵심 키워드 순위 점검', '불일치 0건', '약 30분'],
+      ['<b>월간</b>', '블로그 ' + M.road.blogTarget + '건 발행 · 올리기 키워드 ' + M.road.up.length + '개 순위 리뷰 · 월간 성과 정리', '방문자 리뷰 ' + nf(M.road.reviewTarget) + '건', '약 4시간'],
+      ['<b>분기</b>', '종합 점수 재진단 · 키워드 3분류 재설정 · 광고 효율 점검', '점수 ' + M.proj + '점', '약 3시간']
+    ], 'llcc') +
+    H.note('<b>판단 한계</b> — 운영 주체는 공개 지표(게시 주기·문체·광고 흔적)로만 추정할 수 있어 확정이 아닙니다. 대행 이용이 확인될 경우 기존 계약 범위(플레이스·블로그·광고) 및 성과 리포트 요청으로 중복 투자를 점검하세요.');
+}
+
+/* ---- P.14 개선 로드맵 ---- */
+function p14(M) {
+  const tasks = M.tasks, rd = M.road, cfg = M.cfg;
+  const impB = n => H.badge(n >= 3 ? '효과 상' : n === 2 ? '효과 중' : '효과 하', n >= 3 ? 'g' : n === 2 ? 'b' : 's');
+  const effB = n => H.badge(n >= 3 ? '난이도 상' : n === 2 ? '난이도 중' : '난이도 하', n >= 3 ? 'r' : n === 2 ? 'y' : 'g');
+  const rows = tasks.map(t => ['<b>' + t.no + '</b>', '<b>' + t.t + '</b><div class="small" style="color:#475569">' + t.d + '</div>', impB(t.imp), effB(t.eff), t.wk, '<b style="color:#166534">+' + t.gain + '점</b>']);
+  const cell = (hi, eh, label, bg, col) => '<div style="background:' + bg + '"><div class="qh" style="color:' + col + '">' + label + '</div>' + tasks.filter(t => t.hi === hi && t.effHigh === eh).map(t => '<div style="display:flex;gap:4px;align-items:flex-start;margin-top:3px"><span class="mxb" style="background:' + col + ';flex:none;margin:0">' + t.no + '</span><span style="font-size:8.8px;line-height:1.35;color:#1e293b">' + t.t + '</span></div>').join('') + '</div>';
+  const m1 = ['플레이스 사진·소식 정비 시작 (사진 ' + M.place.photoTarget + '장 목표)', '4대 지도 채널 정보 일원화 (이슈 ' + M.mapIssues + '건)', fillTpl(cfg.tasks[2].t, M), '대표 키워드 5개·소개글 재설정'];
+  const m2 = [fillTpl(cfg.tasks[0].t, M), '블로그 월 ' + rd.blogTarget + '건 정기 발행 가동', '리뷰 응대·유입 동선 가동 (목표 ' + nf(rd.reviewTarget) + '건)', '\'올리기\' 키워드 ' + rd.up.length + '개 집중 개선'];
+  const m3 = [fillTpl(cfg.tasks[1].t, M), '광고 테스트 월 ' + nf(M.ads.budget) + '원 → 효율 키워드 압축', '\'발굴\' 키워드 신규 노출 기반 확보', '월간 성과 리포트·점수 재진단'];
+  const col = (title, color, items, kpi) => '<div class="rm"><div class="hd" style="background:' + color + '">' + title + '</div><div class="bd2"><ul class="ls">' + items.map(x => '<li>' + x + '</li>').join('') + '</ul><div style="margin-top:6px;padding-top:5px;border-top:1px dashed #cbd5e1;font-size:9px"><b>KPI</b> ' + kpi + '</div></div></div>';
+  return H.title('14', '개선 로드맵', '6대 과제 · 90일 실행 계획') +
+    H.st('6대 개선 과제 (효과 / 난이도)') + H.table(['#', '과제 및 실행 내용', '효과', '난이도', '기간', '예상 점수'], rows, 'cl' + 'ccc' + 'c') +
+    '<div class="row"><div style="flex:1"><div class="mx" style="margin-top:2px">' + cell(true, false, '① 즉시 실행 (효과 큼 · 쉬움)', '#dcfce7', '#166534') + cell(true, true, '② 전략 과제 (효과 큼 · 어려움)', '#dbeafe', '#1d4ed8') + cell(false, false, '③ 보조 과제 (효과 보통 · 쉬움)', '#fef3c7', '#92400e') + cell(false, true, '④ 후순위 (효과 보통 · 어려움)', '#f1f5f9', '#475569') + '</div></div>' +
+    '<div class="card dk" style="width:196px;flex:none;text-align:center"><div style="font-size:9px;color:#94a3b8">90일 개선 후 예상 점수</div><div style="display:flex;justify-content:center;align-items:baseline;gap:6px;margin:6px 0"><span style="font-size:22px;color:#fbbf24;font-weight:800">' + M.score.total + '</span><span style="color:#94a3b8">→</span><span style="font-size:38px;font-weight:900;color:#4ade80">' + M.proj + '</span></div><div style="font-size:11px;font-weight:800">C등급 → B등급</div><div style="font-size:8.8px;color:#94a3b8;margin-top:5px;line-height:1.5">6대 과제 누적 효과 +' + M.gainSum + '점 (상한 보정)<br>실행 충실도에 따라 변동</div></div></div>' +
+    H.st('90일 실행 로드맵') +
+    '<div class="g3">' + col('1개월차 · 기반 정비', '#16a34a', m1, '체크리스트 6/6 · 지도 이슈 0건') + col('2개월차 · 확산·개선', '#2563eb', m2, '올리기 평균 ' + rd.upAvg + '위 → ' + Math.round(rd.upAvg * 0.6) + '위') + col('3개월차 · 최적화·확장', '#7c3aed', m3, '올리기 키워드 3위권 · 점수 ' + M.proj + '점') + '</div>' +
+    '<div class="small">※ 예상 점수 상승폭은 채널 가중치와 현재 점수 격차로 계산한 모델 값이며 성과를 보장하지 않습니다. ' + (cfg.key === 'medical' ? '의료법 제56조에 따라 체험단·후기 원고는 과제에서 제외했습니다.' : cfg.law.rules[cfg.law.rules.length - 1] + ' 등 업종 법규 준수 범위 내에서 실행합니다.') + '</div>';
+}
+
+/* ---- P.15 데이터 출처 ---- */
+function p15(M) {
+  const cfg = M.cfg;
+  const src = [
+    ['사업자 상태', '국세청 사업자등록 상태 조회 (홈택스·공공데이터포털 공개 API)', '계속·휴업·폐업 여부, 과세유형'],
+    ['홈페이지·스토어', '공개 URL 직접 접속 (렌더링 화면·원본 HTML 확인)', '구조·예약 연동·법정 고지 표기'],
+    ['플레이스 순위', '네이버 모바일 플레이스 목록 직접 확인', '키워드별 노출 순위 (기기·시점 의존)'],
+    ['월 검색량', '네이버 검색광고 키워드도구 (최근 30일)', 'PC·모바일 합산 월 조회수'],
+    ['경쟁·광고 노출', '네이버 모바일 통합검색 파워링크·플레이스 목록', '광고는 조회 시점 표본'],
+    ['카카오맵·구글지도·티맵', '카카오맵 로컬 검색, 구글지도 공개 페이지, TMAP 장소 검색', '등록·상호·주소·전화 일관성'],
+    ['상권·인구', '카카오 로컬 API, 행정안전부 주민등록 인구통계 (250m 격자 근사)', '반경별 인구·세대·행정동']
+  ].map((x, i) => [i + 1, '<b>' + x[0] + '</b>', x[1], x[2]]);
+  const wRows = [['place', '네이버 플레이스'], ['review', cfg.reviewLabel], ['blog', '블로그 바이럴'], ['home', cfg.homeLabel], ['sns', 'SNS'], ['ads', '광고 운영'], ['info', '정보 일관성']].map(x => {
+    const raw = cfg.w[x[0]], n = x[0] === 'sns' ? null : M.chMap[x[0]];
+    return [x[1], raw, n ? n.w : '<span class="small">제외</span>', n ? n.s : '-', n ? '<b>' + n.pts + '</b>' : '-'];
+  });
+  wRows.push(['<b>합계</b>', '<b>100</b>', '<b>100</b>', '-', '<b>' + M.score.total + '점</b>']);
+  return H.title('15', '조사 방법 · 데이터 출처', 'Methodology & Sources') +
+    H.st('7대 데이터 출처') + H.table(['#', '데이터', '출처·조사 방법', '활용 지표'], src, 'cl' + 'll') +
+    '<div class="note"><b>기준일</b> — 진단 기준일 <b>' + M.issuedStr + '</b> (조회 당일 최신 정보 기준). 순위·광고는 조회 시점·기기·로그인 상태에 따라 달라질 수 있어 표본 값으로 해석합니다.</div>' +
+    '<div class="row"><div style="flex:1.25">' + H.st('배점 가중치 기준 — ' + cfg.label) + H.table(['채널', '업종 가중치', '재산정', '점수', '배점'], wRows, 'lcccc') +
+    '<div class="small" style="margin-top:3px">채널별 0~100점 × ' + cfg.ind + ' 업종 가중치 (' + ['place', 'review', 'blog', 'home', 'sns', 'ads', 'info'].map(k => cfg.w[k]).join(' · ') + '). SNS는 활동량을 확인할 수 없어 제외하고 나머지 ' + M.score.sumEx + '를 100으로 다시 나눴습니다.</div></div>' +
+    '<div style="flex:1"><div class="card am" style="height:100%"><div class="st" style="margin-bottom:4px">준수 법규 · 표현 기준</div><div style="font-size:9.3px;font-weight:700;margin-bottom:3px">' + cfg.law.name + '</div><ul class="ls">' + cfg.law.rules.map(x => '<li>' + x + '</li>').join('') + '</ul>' + (cfg.key === 'medical' ? '<div class="small" style="margin-top:5px">의료법 제56조에 따라 체험단·후기 원고는 개선 과제에 포함하지 않았습니다.</div>' : '') + '</div></div></div>' +
+    '<div class="card rd"><div class="st" style="margin-bottom:3px;color:#b91c1c">이번 진단서의 데이터 구분 및 한계 고지</div>' + H.table(['항목', '구분', '내용'], dataStatus(M).map(r => [r[0], H.badge(STATE_BADGE[r[1]][0], STATE_BADGE[r[1]][1]), r[2]]), 'lcl') +
+    '<div style="font-size:9px;line-height:1.6;color:#44403c;margin-top:4px">\'추정\' 항목은 입력된 상호·주소·키워드·업종을 기반으로 한 <b>모델 추정값</b>이며 실제와 차이가 있을 수 있습니다. 기준일(' + M.issuedStr + ')의 공식 도구 확인 후 의사결정에 활용하시기 바랍니다.' + (M.fixBand ? ' 종합 점수는 발행 규격에 따라 42~57점(C등급) 대역으로 정합되어 있습니다.' : ' 종합 점수는 대역 고정 없이 산출되었습니다.') + '</div></div>' +
+    '<div class="card sl"><div class="st" style="margin-bottom:5px"><i class="fa-solid fa-file-signature" style="color:#16a34a"></i>대외비 서약</div><div style="font-size:9.5px;line-height:1.7;color:#334155">본 문서는 ' + M.name + '의 온라인 마케팅 현황 분석 자료로, 수신자는 발행사(' + M.issuer + ')의 사전 서면 동의 없이 제3자에게 공개·복제·배포하지 않으며 오직 내부 의사결정 목적으로만 사용할 것을 서약합니다.</div>' +
+    '<div style="display:flex;justify-content:space-between;gap:20px;margin-top:10px;font-size:9.5px"><div style="flex:1;border-top:1px solid #94a3b8;padding-top:3px">수신: ' + M.name + ' 대표 (서명)</div><div style="flex:1;border-top:1px solid #94a3b8;padding-top:3px">발행: ' + M.issuer + ' (인)</div><div style="width:150px;border-top:1px solid #94a3b8;padding-top:3px">' + M.issuedStr + ' · ' + M.docId + '</div></div></div>';
+}
+
+const PAGE_BUILDERS = [p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, p11, p12, p13, p14, p15];
+
+function buildReportHTML(M, opts) {
+  opts = opts || {};
+  M.kwAgg.kws0 = M.kws.filter(k => k.spec === 'local').map(k => k.kw).slice(0, 2).join(', ') || M.kws[0].kw;
+  const pages = PAGE_BUILDERS.map((fn, i) => pageWrap(M, i + 1, fn(M))).join('\n');
+  const toolbar = '<div class="rtb noprint"><div><b>' + M.name + '</b> · 마케팅 진단서 · A4 ' + TOTAL_PAGES + '페이지</div><div><span class="hint">인쇄창 [대상: PDF로 저장] · [옵션 &gt; 배경 그래픽] 체크</span><button onclick="window.print()"><i class="fa-solid fa-print"></i> PDF 저장 / 인쇄</button></div></div>';
+  const fit = '<script>function fitPages(){var pages=document.querySelectorAll(".page");for(var i=0;i<pages.length;i++){var pb=pages[i].querySelector(".pb"),zw=pb.firstElementChild;pb.style.flex="";zw.style.zoom=1;var avail=pb.clientHeight;pb.style.flex="none";var hi=i===0?1.1:1.32;var fits=function(z){zw.style.zoom=z;return pb.offsetHeight<=avail-8&&zw.scrollWidth<=zw.clientWidth+1;};var lo=1;if(!fits(1)){var l2=0.55,h2=1;for(var j=0;j<10;j++){var m2=(l2+h2)/2;if(fits(m2))l2=m2;else h2=m2;}lo=fits(l2)?l2:0.55;}else if(fits(hi)){lo=hi;}else{var h=hi;for(var k=0;k<10;k++){var m=(lo+h)/2;if(fits(m))lo=m;else h=m;}}zw.style.zoom=lo;pb.style.flex="";}}window.addEventListener("load",function(){fitPages();if(document.fonts&&document.fonts.ready){document.fonts.ready.then(fitPages);}});window.addEventListener("beforeprint",fitPages);<\/script>';
+  const autoPrint = opts.autoPrint ? '<script>(function(){var done=false;function go(){if(done)return;done=true;setTimeout(function(){try{fitPages();window.focus();window.print();}catch(e){}},500);}window.addEventListener("load",function(){if(document.fonts&&document.fonts.ready){document.fonts.ready.then(function(){setTimeout(go,300);});setTimeout(go,3500);}else{go();}});})();<\/script>' : '';
+  return '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>' + M.name + ' - 온라인 마케팅 종합 진단서 (' + M.docId + ')</title>' +
+    '<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">' +
+    '<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">' +
+    '<style>' + REPORT_CSS + '</style></head><body>' + toolbar + pages + fit + autoPrint + '</body></html>';
+}
+
+/* ==========================================================================
+   5. 폼 · 인터랙션
+   ========================================================================== */
+const $ = id => document.getElementById(id);
+const els = { name: $('bizName'), addr: $('bizAddr'), kw: $('bizKw'), ind: $('bizInd'), detail: $('bizDetail'), issuer: $('bizIssuer'), date: $('bizDate'), doc: $('bizDoc') };
+let lastHtml = '';
+
+INDUSTRY_ORDER.forEach(k => { const o = document.createElement('option'); o.value = k; o.textContent = INDUSTRY_CONFIG[k].label; els.ind.appendChild(o); });
+els.ind.value = 'food';
+
+function toast(msg) { const t = $('toast'); t.textContent = msg; t.style.display = 'block'; clearTimeout(toast._t); toast._t = setTimeout(() => { t.style.display = 'none'; }, 3600); }
+
+function seqKey(dateStr) { return 'adclover_doc_seq_' + dateStr.replace(/-/g, ''); }
+function nextDocId(dateStr) {
+  let seq = 1;
+  try { seq = (parseInt(localStorage.getItem(seqKey(dateStr)) || '0', 10) || 0) + 1; } catch (e) { seq = Math.floor(Math.random() * 900) + 100; }
+  return 'ACR-' + dateStr.replace(/-/g, '') + '-' + String(seq).padStart(4, '0');
+}
+function commitDocSeq(dateStr, docId) {
+  const m = /^ACR-\d{8}-(\d{4})$/.exec(docId);
+  if (!m) return;
+  try { const cur = parseInt(localStorage.getItem(seqKey(dateStr)) || '0', 10) || 0; localStorage.setItem(seqKey(dateStr), String(Math.max(cur, parseInt(m[1], 10)))); } catch (e) { /* storage unavailable */ }
+}
+
+function renderIndHint() {
+  const c = INDUSTRY_CONFIG[els.ind.value];
+  const wl = [['플레이스', c.w.place], ['리뷰', c.w.review], ['블로그', c.w.blog], [c.homeLabel, c.w.home], ['SNS', c.w.sns], ['광고', c.w.ads], ['정보', c.w.info]];
+  $('indHint').innerHTML = '<div class="flex items-center gap-2 mb-1.5"><i class="fa-solid ' + c.icon + ' text-emerald-400"></i><b class="text-slate-100">' + esc(c.label) + '</b><span class="text-slate-500">|</span><span class="text-slate-400">' + esc(c.law.name) + '</span></div>' +
+    '<div class="flex flex-wrap gap-1.5">' + wl.map(x => '<span class="chip" style="' + (x[1] >= 20 ? '' : 'background:#1e293b;color:#94a3b8;border-color:#334155') + '">' + esc(x[0]) + ' ' + x[1] + '</span>').join('') + '</div>' +
+    '<div class="mt-1.5 text-slate-400">가중치 집중: ' + c.focus.map(esc).join(' · ') + '</div>';
+}
+function renderChips() {
+  const list = parseKeywords(els.kw.value);
+  $('kwCount').textContent = Math.min(list.length, 6) + '/6';
+  $('kwChips').innerHTML = list.slice(0, 6).map(k => '<span class="chip"><i class="fa-solid fa-hashtag text-[.6rem]"></i>' + esc(k) + '</span>').join('') + list.slice(6).map(k => '<span class="chip" style="background:#1e293b;color:#64748b;border-color:#334155;text-decoration:line-through">' + esc(k) + '</span>').join('');
+  $('kwOver').classList.toggle('hidden', list.length <= 6);
+}
+function resetDoc() { els.doc.value = nextDocId(els.date.value || isoLocal(new Date())); }
+
+els.kw.addEventListener('input', renderChips);
+els.ind.addEventListener('change', renderIndHint);
+els.date.addEventListener('change', resetDoc);
+$('btnDoc').addEventListener('click', resetDoc);
+$('btnSample').addEventListener('click', () => {
+  els.name.value = '국민낙곱새 의정부점'; els.addr.value = '경기도 의정부시 추동로1번길 32';
+  els.kw.value = '의정부 낙곱새, 신곡동 맛집, 의정부 전골, 동오역 맛집, 의정부 배달 맛집';
+  els.ind.value = 'food'; els.detail.value = '낙곱새·전골 중점'; renderChips(); renderIndHint(); clearErrors();
+});
+
+function clearErrors() { document.querySelectorAll('.errmsg').forEach(e => { e.style.display = 'none'; }); document.querySelectorAll('.fld.err').forEach(e => e.classList.remove('err')); }
+function collect() {
+  clearErrors();
+  const bad = [];
+  const name = els.name.value.trim(), addr = els.addr.value.trim(), kws = parseKeywords(els.kw.value).slice(0, 6);
+  if (!name) bad.push(['bizName', els.name]);
+  if (!addr) bad.push(['bizAddr', els.addr]);
+  if (!kws.length) bad.push(['bizKw', els.kw]);
+  bad.forEach(([id, el]) => { el.classList.add('err'); document.querySelector('[data-err="' + id + '"]').style.display = 'block'; });
+  if (bad.length) { bad[0][1].focus(); return null; }
+  const date = els.date.value || isoLocal(new Date());
+  const num = id => { const v = $(id).value.trim(); return v === '' ? undefined : Number(v); };
+  const bizNo = $('bizNo').value.replace(/\D/g, '');
+  const manual = { reviews: num('manReviews'), photos: num('manPhotos'), news: num('manNews'), reply: num('manReply'), rating: num('manRating'), ads: $('manAds').value,
+    ranks: $('manRanks').value.split(/[,，]/).map(x => { const t = x.trim(); return t === '' ? undefined : Number(t); }) };
+  return { name, address: addr, keywords: kws, industryKey: els.ind.value, detail: els.detail.value.trim(), issuer: els.issuer.value.trim() || '애드클로버', date, docId: els.doc.value.trim() || nextDocId(date),
+    bizNo: bizNo.length === 10 ? bizNo : '', bizNoRaw: bizNo, fixBand: $('fixBand').checked, manual };
+}
+
+/* ---- 실측 데이터 연동 (server/ 프록시) ---- */
+const API = { base: null, health: null };
+function apiUrl(path, params) {
+  const qs = Object.keys(params || {}).map(k => [].concat(params[k]).map(v => encodeURIComponent(k) + '=' + encodeURIComponent(v)).join('&')).join('&');
+  return (API.base || '') + path + (qs ? '?' + qs : '');
+}
+async function apiGet(path, params, timeoutMs) {
+  const ac = new AbortController(); const t = setTimeout(() => ac.abort(), timeoutMs || 15000);
+  try {
+    const r = await fetch(apiUrl(path, params), { signal: ac.signal });
+    let j = null; try { j = await r.json(); } catch (e) { /* non-JSON */ }
+    if (!r.ok) { const err = new Error((j && j.error && j.error.message) || ('HTTP ' + r.status)); err.code = j && j.error && j.error.code; throw err; }
+    return j;
+  } catch (e) { if (e.name === 'AbortError') { const x = new Error('시간 초과'); x.code = 'TIMEOUT'; throw x; } throw e; }
+  finally { clearTimeout(t); }
+}
+function setApiPill(text, ok) {
+  const el = $('apiPill'); el.textContent = text;
+  el.className = 'ml-auto text-[11px] font-semibold rounded-full px-2 py-0.5 ' + (ok ? 'bg-emerald-500/20 text-emerald-300' : 'bg-slate-700 text-slate-300');
+}
+async function checkApi(silent) {
+  const typed = $('apiBase').value.trim().replace(/\/+$/, '');
+  const candidates = typed ? [typed] : (/^https?:$/.test(location.protocol) ? [''] : []);
+  if (!candidates.length) { API.base = null; API.health = null; setApiPill('API 미연결', false); if (!silent) $('apiMsg').textContent = 'API 서버 주소를 입력하거나, node server/dev-server.js 로 띄운 주소에서 이 페이지를 여세요.'; return false; }
+  for (const b of candidates) {
+    API.base = b;
+    try {
+      const h = await apiGet('/api/health', null, 6000);
+      if (h && h.ok) {
+        API.health = h;
+        const c = h.configured || {};
+        const names = [[c.kakao, '카카오(주소·상권)'], [c.naverSearchAd, '검색광고(검색량)'], [c.naverSearch, '네이버 검색(블로그)'], [c.dataGoKr, '공공데이터(국세청·인구)']];
+        const on = names.filter(x => x[0]).map(x => x[1]), off = names.filter(x => !x[0]).map(x => x[1]);
+        setApiPill('API 연결됨 · ' + on.length + '/4', on.length > 0);
+        $('apiMsg').innerHTML = '<span class="text-emerald-300">연결됨</span> — 사용 가능: ' + (on.join(', ') || '없음') + (off.length ? ' <span class="text-amber-300">· 키 미설정: ' + off.join(', ') + '</span>' : '');
+        try { if (typed) localStorage.setItem('adclover_api_base', typed); } catch (e) { /* ignore */ }
+        return true;
+      }
+    } catch (e) { if (!silent) $('apiMsg').innerHTML = '<span class="text-rose-300">연결 실패</span> — ' + esc(e.message); }
+  }
+  API.base = null; API.health = null; setApiPill('API 연결 실패', false);
+  return false;
+}
+async function fetchLive(inp) {
+  const live = { status: {} }, st = live.status;
+  const run = async (key, path, params) => {
+    try { const j = await apiGet(path, params); st[key] = { ok: true }; return j; }
+    catch (e) { st[key] = { ok: false, msg: e.message, unconfigured: e.code === 'NOT_CONFIGURED' }; return null; }
+  };
+  const cfg = INDUSTRY_CONFIG[inp.industryKey];
+  const core = buildGeo(inp, cfg).raw.core || cfg.defaultCore;
+  const pKw = run('keywords', '/api/keywords', { kw: inp.keywords.join(',') });
+  const pNts = inp.bizNo ? run('nts', '/api/nts', { bno: inp.bizNo }) : Promise.resolve(null);
+  const geo = await run('geocode', '/api/geocode', { q: inp.address });
+  live.geo = geo;
+  const pPop = geo && geo.hcode ? run('population', '/api/population', { hcode: geo.hcode }) : Promise.resolve(null);
+  const pPlaces = geo ? run('places', '/api/places', { q: core, x: geo.x, y: geo.y, radii: '500,1000,2000', exclude: inp.name }) : Promise.resolve(null);
+  if (!geo) { st.places = { ok: false, msg: '주소 확인 실패로 건너뜀' }; st.population = { ok: false, msg: '주소 확인 실패로 건너뜀' }; }
+  else if (!geo.hcode) st.population = { ok: false, msg: '행정동코드 없음 (도로명·지번 주소로 입력)' };
+  const places = await pPlaces;
+  live.places = places;
+  const blogQ = [inp.name].concat(((places && places.top) || []).slice(0, 4).map(t => t.name));
+  const blog = await run('blog', '/api/blog', { q: blogQ });
+  if (blog) blog.queriedAt = new Date().toISOString();
+  live.blog = blog;
+  const [kw, nts, pop] = await Promise.all([pKw, pNts, pPop]);
+  live.keywords = kw; live.nts = nts; live.population = pop;
+  if (inp.bizNo && nts) st.nts = { ok: true };
+  return live;
+}
+
+const LOADING_HTML = '<!DOCTYPE html><html lang="ko"><head><meta charset="UTF-8"><title>분석 중...</title><style>body{margin:0;height:100vh;display:flex;align-items:center;justify-content:center;background:#0f172a;color:#e2e8f0;font-family:system-ui,-apple-system,"Malgun Gothic",sans-serif;text-align:center}.s{width:42px;height:42px;border:4px solid #334155;border-top-color:#10b981;border-radius:50%;animation:r 1s linear infinite;margin:0 auto 16px}@keyframes r{to{transform:rotate(360deg)}}small{color:#94a3b8}</style></head><body><div><div class="s"></div><b>키워드·상권·경쟁 데이터를 분석하는 중입니다</b><br><small>15페이지 진단서를 생성하고 있어요</small></div></body></html>';
+
+function openFallback(html) {
+  lastHtml = html;
+  const fb = $('fb'); fb.style.display = 'flex';
+  $('fbFrame').srcdoc = html;
+}
+$('fbClose').addEventListener('click', () => { $('fb').style.display = 'none'; $('fbFrame').srcdoc = ''; });
+$('fbPrint').addEventListener('click', () => { const w = $('fbFrame').contentWindow; try { w.focus(); w.print(); } catch (e) { toast('이 환경에서는 인쇄가 차단되었습니다. HTML 내려받기 후 브라우저에서 열어 인쇄하세요.'); } });
+$('fbDownload').addEventListener('click', () => {
+  const blob = new Blob([lastHtml], { type: 'text/html;charset=utf-8' });
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'marketing-report-' + (els.doc.value || 'report') + '.html';
+  document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+});
+
+function generate(autoPrint) {
+  const inp = collect();
+  if (!inp) return;
+  if (inp.bizNoRaw && !inp.bizNo) toast('사업자등록번호는 숫자 10자리여야 합니다. 국세청 조회는 건너뜁니다.');
+  const w = window.open('', 'adclover_report_' + Date.now(), 'width=1120,height=900,scrollbars=yes,resizable=yes');
+  if (w) { try { w.document.open(); w.document.write(LOADING_HTML); w.document.close(); } catch (e) { /* ignore */ } }
+  setTimeout(async () => {
+    let html;
+    try {
+      if (API.base !== null && API.health) { try { inp.live = await fetchLive(inp); } catch (e) { console.error(e); inp.live = null; toast('실측 조회 중 오류가 발생해 추정값으로 진행합니다: ' + e.message); } }
+      html = buildReportHTML(analyzeMarketingMetrics(inp), { autoPrint: autoPrint && !!w });
+    }
+    catch (err) { console.error(err); if (w) w.close(); toast('분석 중 오류가 발생했습니다: ' + err.message); return; }
+    commitDocSeq(inp.date, inp.docId);
+    if (w && !w.closed) {
+      w.document.open(); w.document.write(html); w.document.close();
+      if (els.doc.value === inp.docId) resetDoc();
+      toast(autoPrint ? '새 창에서 인쇄창이 열립니다. [대상: PDF로 저장] · [배경 그래픽] 체크 후 저장하세요.' : '새 창에서 미리보기를 열었습니다.');
+    } else {
+      openFallback(html);
+      toast('팝업이 차단되어 현재 화면에 표시합니다. 주소창에서 팝업을 허용하면 새 창으로 열립니다.');
+    }
+  }, 380);
+}
+$('reportForm').addEventListener('submit', e => { e.preventDefault(); generate(true); });
+$('btnPreview').addEventListener('click', () => generate(false));
+
+els.date.value = isoLocal(new Date());
+resetDoc(); renderIndHint(); renderChips();
+$('btnApi').addEventListener('click', () => checkApi(false));
+try { const saved = localStorage.getItem('adclover_api_base'); if (saved) $('apiBase').value = saved; } catch (e) { /* ignore */ }
+checkApi(true).then(ok => { if (ok) $('liveBox').open = true; });
+if (typeof window !== 'undefined') { window.__adcloverDebug = { analyzeMarketingMetrics, buildReportHTML, INDUSTRY_CONFIG, fetchLive, checkApi, API }; }
+
+</script>
+</body>
+</html>
