@@ -1,0 +1,16 @@
+name = "adclover-report-api"
+main = "worker.js"
+compatibility_date = "2025-01-01"
+
+[vars]
+# 배포한 정적 페이지 주소로 제한하세요. 예) "https://joytjddn.github.io"
+ALLOWED_ORIGINS = "*"
+
+# 키는 코드/설정에 쓰지 말고 아래 명령으로 등록합니다.
+#   npx wrangler secret put KAKAO_REST_KEY
+#   npx wrangler secret put NAVER_CLIENT_ID
+#   npx wrangler secret put NAVER_CLIENT_SECRET
+#   npx wrangler secret put NAVER_SEARCHAD_CUSTOMER_ID
+#   npx wrangler secret put NAVER_SEARCHAD_API_KEY
+#   npx wrangler secret put NAVER_SEARCHAD_SECRET
+#   npx wrangler secret put DATA_GO_KR_KEY
